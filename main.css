@@ -1,0 +1,22 @@
+.button {
+  width: 100px;
+  height: 100px;
+  background-color: #eee;
+  border: 0.5em solid #000;
+  border-radius: 100vh;
+  text-align: center;
+}
+
+table {
+  background-color: #9999;
+  border-radius: 50px;
+  padding: 2em;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4em;
+}
