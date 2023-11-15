@@ -8,7 +8,7 @@
 }
 
 table {
-  background-color: #9999;
+  background-color: #9994;
   border-radius: 50px;
   padding: 2em;
 }
@@ -19,4 +19,14 @@ body {
   justify-content: center;
   align-items: center;
   padding: 4em;
+}
+
+* {
+  font-size: 24px;
+
+}
+
+button#playAgain {
+  padding: 1em 180px;
+  background-color: #0001;
 }
