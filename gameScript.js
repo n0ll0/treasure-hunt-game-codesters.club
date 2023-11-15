@@ -18,13 +18,14 @@ function buttonClick(event) {
   if (button === treasureButton) {
     if (button.style.backgroundColor === "green") return;
 
+    attempts++;
     gameNumber++;
     message.textContent = "You found the treasure!";
     event.target.style.backgroundColor = "green";
     playAgain.style.display = "block";
 
     let calculatedScore = currentScore + 10 - attempts;
-    scoreElement.textContent = calculatedScore + " / " + gameNumber + " = " + (calculatedScore / gameNumber);
+    scoreElement.textContent = `(+${10-attempts}) ${calculatedScore} / ${gameNumber} = ${calculatedScore / gameNumber} average`;
     currentScore = calculatedScore;
 
     buttons.forEach((BUTTON) => {
@@ -50,12 +51,6 @@ function playAgainClick() {
   message.textContent = "";
   playAgain.style.display = "none";
 }
-
-// HTMLElement.prototype.setStyles = function (styles) {
-//   for (const style in styles) {
-//     this.style[style] = styles[style];
-//   }
-// };
 
 buttons.forEach((button) => button.addEventListener("click", buttonClick));
 
