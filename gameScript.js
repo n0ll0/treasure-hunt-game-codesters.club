@@ -19,9 +19,7 @@ let treasureButton;
  * Select the treasure button at random
  */
 function randomizeTreasure() {
-  const treasureRow = Math.floor(Math.random() * 3);
-  const treasureCol = Math.floor(Math.random() * 3);
-  treasureButton = buttons[treasureRow * 3 + treasureCol];
+  treasureButton = buttons[Math.round(Math.random() * 9)];
 }
 
 /**
