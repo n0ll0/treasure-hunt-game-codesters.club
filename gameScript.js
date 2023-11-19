@@ -5,7 +5,7 @@ let gameNumber = 0;
 let currentScore = 0;
 
 // Get previous game data from local storage
-if (localStorage.getItem("gameNumber") && localStorage.getItem("currentScore")) {
+if (localStorage.getItem("gameNumber") &&window.localStorage.getItem("currentScore")) {
   gameNumber = JSON.parse(localStorage.getItem("gameNumber"));
   currentScore = JSON.parse(localStorage.getItem("currentScore"));
 
@@ -53,8 +53,8 @@ function buttonClick(event) {
     });
 
     // save to local storage
-    localStorage.setItem("gameNumber", JSON.stringify(gameNumber));
-    localStorage.setItem("currentScore", JSON.stringify(currentScore));
+   window.localStorage.setItem("gameNumber", JSON.stringify(gameNumber));
+   window.localStorage.setItem("currentScore", JSON.stringify(currentScore));
 
   } else if (button.style.backgroundColor !== "red") {
     attempts++;
@@ -75,6 +75,11 @@ function playAgainClick() {
 
   message.textContent = "";
   playAgain.style.display = "none";
+}
+
+function resetGameStats() {
+  window.localStorage.clear();
+  window.location.reload();
 }
 
 buttons.forEach((button) => button.addEventListener("click", buttonClick));
