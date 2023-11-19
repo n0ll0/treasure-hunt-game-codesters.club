@@ -82,4 +82,6 @@ function resetGameStats() {
   window.location.reload();
 }
 
+buttons.forEach((button) => button.addEventListener("click", buttonClick));
+
 randomizeTreasure();
