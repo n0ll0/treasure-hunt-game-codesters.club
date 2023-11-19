@@ -5,7 +5,7 @@ let gameNumber = 0;
 let currentScore = 0;
 
 // Get previous game data from local storage
-if (localStorage.getItem("gameNumber") &&window.localStorage.getItem("currentScore")) {
+if (localStorage.getItem("gameNumber") && localStorage.getItem("currentScore")) {
   gameNumber = JSON.parse(localStorage.getItem("gameNumber"));
   currentScore = JSON.parse(localStorage.getItem("currentScore"));
 
@@ -19,7 +19,9 @@ let treasureButton;
  * Select the treasure button at random
  */
 function randomizeTreasure() {
-  treasureButton = buttons[Math.round(Math.random() * 9)];
+  const treasureRow = Math.floor(Math.random() * 3);
+  const treasureCol = Math.floor(Math.random() * 3);
+  treasureButton = buttons[treasureRow * 3 + treasureCol];
 }
 
 /**
@@ -51,8 +53,8 @@ function buttonClick(event) {
     });
 
     // save to local storage
-   window.localStorage.setItem("gameNumber", JSON.stringify(gameNumber));
-   window.localStorage.setItem("currentScore", JSON.stringify(currentScore));
+    localStorage.setItem("gameNumber", JSON.stringify(gameNumber));
+    localStorage.setItem("currentScore", JSON.stringify(currentScore));
 
   } else if (button.style.backgroundColor !== "red") {
     attempts++;
@@ -76,12 +78,8 @@ function playAgainClick() {
 }
 
 function resetGameStats() {
-  window.localStorage.clear();
+  localStorage.clear();
   window.location.reload();
 }
-
-buttons.forEach((button) => button.addEventListener("click", buttonClick));
-
-playAgain.addEventListener("click", playAgainClick);
 
 randomizeTreasure();
