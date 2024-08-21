@@ -6,15 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>game</title>
     <link rel="stylesheet" href="main.css">
-    <script src="gameScript.js" defer async></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
 
   <body>
 
     <main>
-      your score:
-      <span id="scoreElement">0</span>
-
       <table>
         <tr>
           <td class="button"></td>
@@ -33,10 +30,15 @@
         </tr>
       </table>
 
-      <p id="message"> </p>
+      <p id="message"></p>
+      <button onclick="startNewGame()">Start game</button>
       <button onclick="playAgainClick()" id="playAgain">play again</button>
+      <div id="stats" style="width:100%;max-width:1000px"></div>
+      your score:
+      <span id="scoreElement">0</span>
     </main>
     <button id="resetStats" onclick="resetGameStats()">Reset stats</button>
+    <script src="./gameScript.js"></script>
   </body>
 
 </html>

@@ -36,3 +36,12 @@ button#resetStats {
   right: 2em;
   bottom: 2em;
 }
+
+.button[clicked] {
+  background-color: red;
+}
+
+.button[treasure] {
+  background-color: green !important;
+}
+
