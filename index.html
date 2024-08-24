@@ -12,7 +12,7 @@
   <body>
 
     <main>
-      <table>
+      <table class="game">
         <tr>
           <td class="button"></td>
           <td class="button"></td>
@@ -31,10 +31,21 @@
       </table>
 
       <p id="message"></p>
-      <button onclick="startNewGame()">Start game</button>
+      <button onclick="startNewGame()" start>Start game</button>
       <div id="stats" style="width:100%;max-width:1000px"></div>
       average score:
-      <span id="scoreElement">0</span>
+      <table id="scoreElement">
+        <tr>
+          <th>Total Score</th>
+          <th>Game#</th>
+          <th>Averaged Score</th>
+        </tr>
+        <tr>
+          <td table-total>0</td>
+          <td table-gameNr>0</td>
+          <td table-avg>0</td>
+        </tr>
+      </table>
     </main>
     <button id="resetStats" onclick="resetGameStats()">Reset stats</button>
     <script src="./gameScript.js"></script>

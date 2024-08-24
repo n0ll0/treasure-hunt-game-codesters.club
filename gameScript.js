@@ -12,54 +12,56 @@ const layout = {
 /** @type {{state?: Game}} */
 const game = {};
 
-
-const Scores = {
-  /** @param {number} score */
-  add: function (score) {
-    const _scores = JSON.parse(localStorage.getItem("scores"));
+class Scores {
+  static gameNr = 0;
+  static total = 0;
+  /** @type {void}*/
+  static add(score) {
+    const _scores = this.get();
     _scores.push(score);
     localStorage.setItem("scores", JSON.stringify(_scores));
-  },
-  /** @returns {number[]} */
-  get: function () {
-    return JSON.parse(localStorage.getItem("scores"));
+  }
+  /** @type {number[]}*/
+  static get() {
+    /** @type {number[]}*/
+    const _scores = JSON.parse(localStorage.getItem("scores"));
+    if (!_scores) {
+      localStorage.setItem("scores", '[]');
+      return this.get();
+    }
+    this.gameNr = _scores.length;
+    this.total = _scores.reduce((prev, score) => prev + score, 0);
+    return _scores;
   }
 }
 
-// Get previous game data from local storage
-if (localStorage.getItem("gameNumber") && localStorage.getItem("currentScore")) {
-  const currentScore = parseInt(localStorage.getItem("currentScore"));
-  gameNumber = JSON.parse(localStorage.getItem("gameNumber"));
-  scoreElement.textContent = `${currentScore} / ${gameNumber} = ${currentScore / gameNumber} average`;
-}
-
-if (localStorage.getItem("scores")) {
+/**
+ * 
+ * @param {number?} score
+ */
+function refreshScoreboard(score) {
   Plotly.newPlot("stats", [
     {
       y: Scores.get(),
       type: "lines",
     },
   ], layout);
+
+  if (score !== null && score !== undefined) {
+    scoreElement.querySelector('[table-total]').textContent = `(+${score}) ${Scores.total}`;
+  } else {
+    scoreElement.querySelector('[table-total]').textContent = Scores.total;
+  }
+  scoreElement.querySelector('[table-gameNr]').textContent = Scores.gameNr;
+  scoreElement.querySelector('[table-avg]').textContent = Scores.total / Scores.gameNr;
 }
 
 function calcAndStoreScores(attempts) {
-  gameNumber++;
-  const currentScore = parseInt(localStorage.getItem("currentScore"));
   const score = 10 - attempts;
-  const calculatedScore = currentScore + score;
-  scoreElement.textContent = `(+${score}) ${calculatedScore} / ${gameNumber} = ${calculatedScore / gameNumber} average`;
+
   Scores.add(score);
 
-  // save to local storage
-  localStorage.setItem("gameNumber", JSON.stringify(gameNumber));
-  localStorage.setItem("currentScore", currentScore);
-
-  Plotly.newPlot("stats", [
-    {
-      y: Scores.get(),
-      type: "lines",
-    },
-  ], layout);
+  refreshScoreboard(score)
 }
 
 class Game {
@@ -93,6 +95,7 @@ class Game {
   #endGame() {
     this.ended = true;
     message.textContent = "You've found the treasure!";
+    document.querySelector('[start]').style.display = "inline-block";
     this.#treasure.setAttribute("treasure", true);
     this.#buttons.forEach(btn => {
       btn.onclick = null;
@@ -119,7 +122,11 @@ function startNewGame() {
   };
 
   game.state = new Game(buttons);
+
   message.textContent = "";
+  refreshScoreboard();
+
+  document.querySelector('[start]').style.display = "none";
 }
 
 function resetGameStats() {
