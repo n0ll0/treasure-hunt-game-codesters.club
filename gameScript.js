@@ -65,7 +65,7 @@ function refreshScoreboard(score) {
         ...layout,
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
-        font: { color: '#fff' }
+        font: { color: '#fff' },
       });
     } else {
       // Fallback: Create a simple CSS-based chart
@@ -323,6 +323,17 @@ function startNewGame() {
 }
 
 function resetGameStats() {
+  // Close the confirmation dialog first
+  const confirmDialog = document.getElementById('reset-confirmation');
+  if (confirmDialog) {
+    confirmDialog.hidePopover();
+  }
+  // Close dashboard dialog too
+  const dashboard = document.getElementById('dashboard');
+  if (dashboard) {
+    dashboard.hidePopover();
+  }
+  
   localStorage.clear();
   window.location.reload();
 }
