@@ -1,7 +1,6 @@
 "use strict";
 const buttons = document.querySelectorAll("td.button");
 const message = document.getElementById("message");
-const scoreElement = document.getElementById("scoreElement");
 
 var gameNumber = 0;
 
@@ -11,6 +10,17 @@ const layout = {
 
 /** @type {{state?: Game}} */
 const game = {};
+
+// Achievement tracking
+const achievements = {
+  perfectShots: 0,
+  quickDraws: 0,
+  treasureMaster: 0,
+  persistent: 0
+};
+
+// Recent games tracking
+const recentGames = [];
 
 class Scores {
   static gameNr = 0;
@@ -66,13 +76,82 @@ function refreshScoreboard(score) {
     createFallbackChart(Scores.get());
   }
 
+  // Update main stats
+  const totalElement = document.querySelector('[table-total]');
+  const gamesElement = document.querySelector('[table-gameNr]');
+  const avgElement = document.querySelector('[table-avg]');
+  
   if (score !== null && score !== undefined) {
-    scoreElement.querySelector('[table-total]').textContent = `(+${score}) ${Scores.total}`;
+    totalElement.textContent = `${Scores.total}`;
+    // Add score animation
+    totalElement.style.transform = 'scale(1.2)';
+    totalElement.style.color = '#00ff00';
+    setTimeout(() => {
+      totalElement.style.transform = 'scale(1)';
+      totalElement.style.color = '#ffd700';
+    }, 600);
   } else {
-    scoreElement.querySelector('[table-total]').textContent = Scores.total;
+    totalElement.textContent = Scores.total;
   }
-  scoreElement.querySelector('[table-gameNr]').textContent = Scores.gameNr;
-  scoreElement.querySelector('[table-avg]').textContent = Math.round((Scores.total / Scores.gameNr) * 100) / 100 || 0;
+  
+  gamesElement.textContent = Scores.gameNr;
+  avgElement.textContent = Math.round((Scores.total / Scores.gameNr) * 100) / 100 || 0;
+  
+  // Update best score
+  updateBestScore();
+  updateAchievements();
+  updateRecentGames();
+}
+
+function updateBestScore() {
+  const scores = Scores.get();
+  const bestScore = Math.max(...scores, 0);
+  document.getElementById('best-score').textContent = bestScore;
+}
+
+function updateAchievements() {
+  // Load achievements from localStorage
+  const storedAchievements = JSON.parse(localStorage.getItem('achievements') || '{}');
+  Object.assign(achievements, storedAchievements);
+  
+  // Update achievement displays
+  document.getElementById('perfect-shots').textContent = achievements.perfectShots || 0;
+  document.getElementById('quick-draws').textContent = achievements.quickDraws || 0;
+  document.getElementById('treasure-master').textContent = achievements.treasureMaster || 0;
+  document.getElementById('persistent-count').textContent = achievements.persistent || 0;
+  
+  // Add earned class to badges with counts > 0
+  updateBadgeStatus('perfect-shot-badge', achievements.perfectShots);
+  updateBadgeStatus('quick-draw-badge', achievements.quickDraws);
+  updateBadgeStatus('treasure-master-badge', achievements.treasureMaster);
+  updateBadgeStatus('persistent-badge', achievements.persistent);
+}
+
+function updateBadgeStatus(badgeId, count) {
+  const badge = document.getElementById(badgeId);
+  if (count > 0) {
+    badge.classList.add('earned');
+  } else {
+    badge.classList.remove('earned');
+  }
+}
+
+function updateRecentGames() {
+  const gamesList = document.getElementById('recent-games-list');
+  const storedGames = JSON.parse(localStorage.getItem('recentGames') || '[]');
+  
+  if (storedGames.length === 0) {
+    gamesList.innerHTML = '<div class="no-games">🗺️ No expeditions yet, matey!</div>';
+    return;
+  }
+  
+  gamesList.innerHTML = storedGames.slice(-5).reverse().map((game, index) => `
+    <div class="game-entry">
+      <span class="game-number">Game ${storedGames.length - index}</span>
+      <span class="game-attempts">${game.attempts} attempts</span>
+      <span class="game-score">+${game.score} 💰</span>
+    </div>
+  `).join('');
 }
 
 function createFallbackChart(scores) {
@@ -248,14 +327,6 @@ function resetGameStats() {
   window.location.reload();
 }
 
-function showInstructions() {
-  document.getElementById('instructions').style.display = 'block';
-}
-
-function hideInstructions() {
-  document.getElementById('instructions').style.display = 'none';
-}
-
 // Add difficulty levels and game modes
 const GameModes = {
   CLASSIC: 'classic',
@@ -266,19 +337,43 @@ const GameModes = {
 // Enhanced scoring system with combo bonuses
 function calcAndStoreScores(attempts) {
   let score = Math.max(1, 10 - attempts);
+  let bonusMessage = "";
   
   // Bonus for perfect games (finding in 1 try)
   if (attempts === 1) {
     score += 5;
-    message.textContent += " 🎯 PERFECT SHOT BONUS! +5 points!";
+    bonusMessage += " 🎯 PERFECT SHOT BONUS! +5 points!";
+    achievements.perfectShots = (achievements.perfectShots || 0) + 1;
   }
   
   // Bonus for quick games (finding in 2-3 tries)
-  if (attempts <= 3) {
+  if (attempts <= 3 && attempts > 1) {
     score += 2;
-    message.textContent += " ⚡ QUICK FIND BONUS! +2 points!";
+    bonusMessage += " ⚡ QUICK FIND BONUS! +2 points!";
+    achievements.quickDraws = (achievements.quickDraws || 0) + 1;
   }
-
+  
+  // Master achievement (score > 10)
+  if (score >= 10) {
+    achievements.treasureMaster = (achievements.treasureMaster || 0) + 1;
+  }
+  
+  // Persistent achievement (games played)
+  if (Scores.gameNr + 1 >= 10) {
+    achievements.persistent = Math.floor((Scores.gameNr + 1) / 10);
+  }
+  
+  // Store game in recent games
+  const gameData = { attempts, score, timestamp: Date.now() };
+  const storedGames = JSON.parse(localStorage.getItem('recentGames') || '[]');
+  storedGames.push(gameData);
+  localStorage.setItem('recentGames', JSON.stringify(storedGames));
+  
+  // Store achievements
+  localStorage.setItem('achievements', JSON.stringify(achievements));
+  
+  message.textContent += bonusMessage;
+  
   Scores.add(score);
   refreshScoreboard(score);
 }

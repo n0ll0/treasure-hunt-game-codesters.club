@@ -183,10 +183,15 @@ button#resetStats:hover {
   color: #333;
   padding: 25px;
   border-radius: 15px;
-  margin: 20px 0;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   max-width: 500px;
   text-align: center;
+  border: 2px solid #2c5aa0;
+}
+
+.instructions-panel::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 }
 
 .instructions-panel h3 {
@@ -217,7 +222,175 @@ button#resetStats:hover {
 .score-section h3 {
   color: #ffd700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+}
+
+.stat-icon {
+  font-size: 2.5em;
+  opacity: 0.8;
+}
+
+.stat-content {
+  flex: 1;
+  text-align: left;
+}
+
+.stat-value {
+  font-size: 2em;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.stat-label {
+  color: #fff;
+  font-size: 0.9em;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+.achievements {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.achievements h4 {
+  color: #ffd700;
   margin-bottom: 15px;
+}
+
+.badge-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.achievement-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.achievement-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.achievement-badge.earned {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.badge-icon {
+  font-size: 1.2em;
+}
+
+.badge-name {
+  color: #fff;
+  font-size: 0.85em;
+  flex: 1;
+}
+
+.badge-count {
+  background: rgba(255, 215, 0, 0.3);
+  color: #ffd700;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.recent-games {
+  margin-top: 30px;
+}
+
+.recent-games h4 {
+  color: #ffd700;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.games-list {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.game-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.game-entry:last-child {
+  border-bottom: none;
+}
+
+.game-number {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.game-score {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.game-attempts {
+  opacity: 0.7;
+  font-size: 0.9em;
+}
+
+.no-games {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  padding: 20px;
 }
 
 .fallback-chart {
