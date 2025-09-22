@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>game</title>
+    <title>🏴‍☠️ Treasure Hunt Adventure</title>
     <link rel="stylesheet" href="main.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
@@ -12,42 +12,127 @@
   <body>
 
     <main>
-      <table class="game">
-        <tr>
-          <td class="button"></td>
-          <td class="button"></td>
-          <td class="button"></td>
-        </tr>
-        <tr>
-          <td class="button"></td>
-          <td class="button"></td>
-          <td class="button"></td>
-        </tr>
-        <tr>
-          <td class="button"></td>
-          <td class="button"></td>
-          <td class="button"></td>
-        </tr>
-      </table>
+      <div class="game-container">
+        <table class="game">
+          <tr>
+            <td class="button"></td>
+            <td class="button"></td>
+            <td class="button"></td>
+          </tr>
+          <tr>
+            <td class="button"></td>
+            <td class="button"></td>
+            <td class="button"></td>
+          </tr>
+          <tr>
+            <td class="button"></td>
+            <td class="button"></td>
+            <td class="button"></td>
+          </tr>
+        </table>
+      </div>
 
-      <p id="message"></p>
-      <button onclick="startNewGame()" start>Start game</button>
-      <div id="stats" style="width:100%;max-width:1000px"></div>
-      average score:
-      <table id="scoreElement">
-        <tr>
-          <th>Total Score</th>
-          <th>Game#</th>
-          <th>Averaged Score</th>
-        </tr>
-        <tr>
-          <td table-total>0</td>
-          <td table-gameNr>0</td>
-          <td table-avg>0</td>
-        </tr>
-      </table>
+      <p id="message">🏴‍☠️ Welcome, treasure hunter! Ready to find the gold? 🏴‍☠️</p>
+      
+      <div class="controls">
+        <button onclick="startNewGame()" start>⚓ Start New Adventure</button>
+        <button popovertarget="instructions" class="instructions-btn">📜 Instructions</button>
+        <button popovertarget="dashboard" class="dashboard-btn">📊 Dashboard</button>
+        <button popovertarget="score-chart" class="chart-btn">📈 Score Chart</button>
+      </div>
+
+      <div id="instructions" popover class="instructions-panel">
+        <h3>🗺️ How to Play</h3>
+        <p>🏴‍☠️ Click on the circles to search for the hidden treasure!</p>
+        <p>💰 Find the treasure in the fewest attempts to get a higher score!</p>
+        <p>⭐ Score = 10 - (number of attempts)</p>
+        <button popovertarget="instructions" popovertargetaction="hide">Got it!</button>
+      </div>
+      
+      <div id="score-chart" popover class="chart-panel">
+        <h3>📈 Score History</h3>
+        <div id="stats" style="width:100%;max-width:500px"></div>
+        <button popovertarget="score-chart" popovertargetaction="hide">Close</button>
+      </div>
+      
+      <div id="dashboard" popover class="dashboard-panel">
+        <h3>📊 Treasure Hunter Dashboard</h3>
+        
+        <!-- Main Stats Cards -->
+        <div class="stats-cards">
+          <div class="stat-card total-score">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+              <div class="stat-value" table-total>0</div>
+              <div class="stat-label">Total Doubloons</div>
+            </div>
+          </div>
+          
+          <div class="stat-card games-played">
+            <div class="stat-icon">🏴‍☠️</div>
+            <div class="stat-content">
+              <div class="stat-value" table-gameNr>0</div>
+              <div class="stat-label">Expeditions</div>
+            </div>
+          </div>
+          
+          <div class="stat-card average-score">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-content">
+              <div class="stat-value" table-avg>0</div>
+              <div class="stat-label">Avg. Haul</div>
+            </div>
+          </div>
+          
+          <div class="stat-card best-score">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-content">
+              <div class="stat-value" id="best-score">0</div>
+              <div class="stat-label">Best Haul</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievement Badges -->
+        <div class="achievements">
+          <h4>🏆 Pirate Achievements</h4>
+          <div class="badge-container">
+            <div class="achievement-badge" id="perfect-shot-badge">
+              <span class="badge-icon">🎯</span>
+              <span class="badge-name">Perfect Shot</span>
+              <span class="badge-count" id="perfect-shots">0</span>
+            </div>
+            <div class="achievement-badge" id="quick-draw-badge">
+              <span class="badge-icon">⚡</span>
+              <span class="badge-name">Quick Draw</span>
+              <span class="badge-count" id="quick-draws">0</span>
+            </div>
+            <div class="achievement-badge" id="treasure-master-badge">
+              <span class="badge-icon">👑</span>
+              <span class="badge-name">Treasure Master</span>
+              <span class="badge-count" id="treasure-master">0</span>
+            </div>
+            <div class="achievement-badge" id="persistent-badge">
+              <span class="badge-icon">🗡️</span>
+              <span class="badge-name">Persistent</span>
+              <span class="badge-count" id="persistent-count">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leaderboard Style Recent Games -->
+        <div class="recent-games">
+          <h4>⚓ Recent Expeditions</h4>
+          <div class="games-list" id="recent-games-list">
+            <div class="no-games">🗺️ No expeditions yet, matey!</div>
+          </div>
+        </div>
+        
+        <button popovertarget="dashboard" popovertargetaction="hide">Close Dashboard</button>
+      </div>
     </main>
-    <button id="resetStats" onclick="resetGameStats()">Reset stats</button>
+    
+    <button id="resetStats" onclick="resetGameStats()">🔄 Reset Stats</button>
     <script src="./gameScript.js"></script>
   </body>
 
