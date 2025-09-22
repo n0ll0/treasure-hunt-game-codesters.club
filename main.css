@@ -20,11 +20,8 @@ html {
 }
 
 .button {
-  width: min(max-content, 5rem);
-  height: min(max-content, 5rem);
-  min-width: 3rem;
-  min-height: 3rem;
-  aspect-ratio: 1;
+  width: 4rem;
+  height: 4rem;
   background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
   border: 0.15rem solid #2c5aa0;
   border-radius: 50%;
@@ -41,8 +38,8 @@ html {
 /* Desktop adjustments */
 @media (min-width: 768px) {
   .button {
-    min-width: 4rem;
-    min-height: 4rem;
+    width: 5rem;
+    height: 5rem;
     border: 0.2rem solid #2c5aa0;
     font-size: 1.8rem;
   }
@@ -50,8 +47,8 @@ html {
 
 @media (min-width: 1024px) {
   .button {
-    min-width: 5rem;
-    min-height: 5rem;
+    width: 6rem;
+    height: 6rem;
     border: 0.3rem solid #2c5aa0;
     font-size: 2rem;
   }
