@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>game</title>
+    <title>🏴‍☠️ Treasure Hunt Adventure</title>
     <link rel="stylesheet" href="main.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
@@ -12,42 +12,61 @@
   <body>
 
     <main>
-      <table class="game">
-        <tr>
-          <td class="button"></td>
-          <td class="button"></td>
-          <td class="button"></td>
-        </tr>
-        <tr>
-          <td class="button"></td>
-          <td class="button"></td>
-          <td class="button"></td>
-        </tr>
-        <tr>
-          <td class="button"></td>
-          <td class="button"></td>
-          <td class="button"></td>
-        </tr>
-      </table>
+      <div class="game-container">
+        <table class="game">
+          <tr>
+            <td class="button"></td>
+            <td class="button"></td>
+            <td class="button"></td>
+          </tr>
+          <tr>
+            <td class="button"></td>
+            <td class="button"></td>
+            <td class="button"></td>
+          </tr>
+          <tr>
+            <td class="button"></td>
+            <td class="button"></td>
+            <td class="button"></td>
+          </tr>
+        </table>
+      </div>
 
-      <p id="message"></p>
-      <button onclick="startNewGame()" start>Start game</button>
+      <p id="message">🏴‍☠️ Welcome, treasure hunter! Ready to find the gold? 🏴‍☠️</p>
+      
+      <div class="controls">
+        <button onclick="startNewGame()" start>⚓ Start New Adventure</button>
+        <button onclick="showInstructions()" class="instructions-btn">📜 Instructions</button>
+      </div>
+
+      <div id="instructions" class="instructions-panel" style="display: none;">
+        <h3>🗺️ How to Play</h3>
+        <p>🏴‍☠️ Click on the circles to search for the hidden treasure!</p>
+        <p>💰 Find the treasure in the fewest attempts to get a higher score!</p>
+        <p>⭐ Score = 10 - (number of attempts)</p>
+        <button onclick="hideInstructions()">Got it!</button>
+      </div>
+      
       <div id="stats" style="width:100%;max-width:1000px"></div>
-      average score:
-      <table id="scoreElement">
-        <tr>
-          <th>Total Score</th>
-          <th>Game#</th>
-          <th>Averaged Score</th>
-        </tr>
-        <tr>
-          <td table-total>0</td>
-          <td table-gameNr>0</td>
-          <td table-avg>0</td>
-        </tr>
-      </table>
+      
+      <div class="score-section">
+        <h3>📊 Treasure Hunter Stats</h3>
+        <table id="scoreElement">
+          <tr>
+            <th>💰 Total Score</th>
+            <th>🏴‍☠️ Games Played</th>
+            <th>⭐ Average Score</th>
+          </tr>
+          <tr>
+            <td table-total>0</td>
+            <td table-gameNr>0</td>
+            <td table-avg>0</td>
+          </tr>
+        </table>
+      </div>
     </main>
-    <button id="resetStats" onclick="resetGameStats()">Reset stats</button>
+    
+    <button id="resetStats" onclick="resetGameStats()">🔄 Reset Stats</button>
     <script src="./gameScript.js"></script>
   </body>
 
