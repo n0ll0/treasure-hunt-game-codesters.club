@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .button {
   width: 100px;
   height: 100px;
