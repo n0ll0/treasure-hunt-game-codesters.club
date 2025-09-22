@@ -52,27 +52,29 @@
 
       </div>
 
-      <div id="score-chart" popover="manual" class="chart-panel">
-        <h3>📈 Score History</h3>
-        <div id="stats"></div>
-        <script>
-          const container = document.getElementById('score-chart');
-          function updateStatsSize() {
-            const stats = document.getElementById('stats');
-            if (!stats || !container) return;
-            const rect = container.getBoundingClientRect();
-            stats.style.width = Math.max(window.innerWidth < 540 ? 250 : 500, rect.width * 0.8) + 'px';
-            stats.style.height = (window.innerHeight < 400 ? 300 : 380) + 'px';
-            // Refresh Plotly chart if it exists
-            if (window.Plotly && stats.children.length > 0) {
-              Plotly.Plots.resize(stats);
+      <div id="score-chart" popover="manual">
+        <div class="chart-panel">
+          <h3>📈 Score History</h3>
+          <div id="stats"></div>
+          <script>
+            const container = document.getElementById('score-chart');
+            function updateStatsSize() {
+              const stats = document.getElementById('stats');
+              if (!stats || !container) return;
+              const rect = container.getBoundingClientRect();
+              stats.style.width = Math.max(window.innerWidth < 540 ? 250 : 500, rect.width * 0.8) + 'px';
+              stats.style.height = (window.innerHeight < 400 ? 300 : 380) + 'px';
+              // Refresh Plotly chart if it exists
+              if (window.Plotly && stats.children.length > 0) {
+                Plotly.Plots.resize(stats);
+              }
             }
-          }
-          window.addEventListener('resize', updateStatsSize);
-          container.addEventListener("toggle", updateStatsSize);
-          updateStatsSize();
-        </script>
-        <button popovertarget="score-chart" popovertargetaction="hide">Close</button>
+            window.addEventListener('resize', updateStatsSize);
+            container.addEventListener("toggle", updateStatsSize);
+            updateStatsSize();
+          </script>
+          <button popovertarget="score-chart" popovertargetaction="hide">Close</button>
+        </div>
       </div>
 
       <div id="dashboard" popover="manual">
