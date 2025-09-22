@@ -176,6 +176,42 @@ button#resetStats:hover {
   box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
 }
 
+.dashboard-btn {
+  padding: 12px 25px;
+  background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.dashboard-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.chart-btn {
+  padding: 12px 25px;
+  background: linear-gradient(145deg, #ffd700, #ffed4e);
+  color: #8b4513;
+  border: none;
+  border-radius: 25px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.chart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
 .instructions-panel {
   background: rgba(255, 255, 255, 0.95);
   color: #333;
@@ -190,6 +226,87 @@ button#resetStats:hover {
 .instructions-panel::backdrop {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
+}
+
+.dashboard-panel {
+  background: rgba(30, 60, 114, 0.95);
+  color: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 2px solid #ffd700;
+}
+
+.dashboard-panel::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+}
+
+.dashboard-panel h3 {
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.dashboard-panel button {
+  padding: 10px 20px;
+  background: linear-gradient(145deg, #32cd32, #228b22);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 0.3s ease;
+}
+
+.dashboard-panel button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(50, 205, 50, 0.3);
+}
+
+.chart-panel {
+  background: rgba(30, 60, 114, 0.95);
+  color: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  max-width: 600px;
+  border: 2px solid #ffd700;
+  text-align: center;
+}
+
+.chart-panel::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.chart-panel h3 {
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 15px;
+}
+
+.chart-panel button {
+  padding: 10px 20px;
+  background: linear-gradient(145deg, #32cd32, #228b22);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+}
+
+.chart-panel button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(50, 205, 50, 0.3);
 }
 
 .instructions-panel h3 {
@@ -217,14 +334,15 @@ button#resetStats:hover {
   margin-top: 2em;
 }
 
-.score-section h3 {
+.score-section h3,
+.dashboard-panel .stats-cards {
   color: #ffd700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   margin-bottom: 20px;
   text-align: center;
 }
 
-.stats-cards {
+.dashboard-panel .stats-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;

@@ -37,6 +37,8 @@
       <div class="controls">
         <button onclick="startNewGame()" start>⚓ Start New Adventure</button>
         <button popovertarget="instructions" class="instructions-btn">📜 Instructions</button>
+        <button popovertarget="dashboard" class="dashboard-btn">📊 Dashboard</button>
+        <button popovertarget="score-chart" class="chart-btn">📈 Score Chart</button>
       </div>
 
       <div id="instructions" popover class="instructions-panel">
@@ -47,9 +49,13 @@
         <button popovertarget="instructions" popovertargetaction="hide">Got it!</button>
       </div>
       
-      <div id="stats" style="width:100%;max-width:1000px"></div>
+      <div id="score-chart" popover class="chart-panel">
+        <h3>📈 Score History</h3>
+        <div id="stats" style="width:100%;max-width:500px"></div>
+        <button popovertarget="score-chart" popovertargetaction="hide">Close</button>
+      </div>
       
-      <div class="score-section">
+      <div id="dashboard" popover class="dashboard-panel">
         <h3>📊 Treasure Hunter Dashboard</h3>
         
         <!-- Main Stats Cards -->
@@ -121,6 +127,8 @@
             <div class="no-games">🗺️ No expeditions yet, matey!</div>
           </div>
         </div>
+        
+        <button popovertarget="dashboard" popovertargetaction="hide">Close Dashboard</button>
       </div>
     </main>
     
