@@ -427,11 +427,29 @@ button[start]:active {
   backdrop-filter: blur(4px);
 }
 
-.dashboard-panel {
-  background: rgba(30, 60, 114, 0.95);
+[popover] {
+  border: none;
+  background: none;
+  overflow: visible;
+}
+
+.panel {
+  background: #1e3c72f2;
+  padding: 2rem;
+  border-radius: 1.5rem;
   color: #fff;
-  padding: 30px;
-  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  border: 2px solid #ffd700;
+}
+
+.dashboard-panel {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.5rem;
+  background: #1e3c72f2;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 1.5rem;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   max-width: 90vw;
   max-height: 90vh;
@@ -447,21 +465,19 @@ button[start]:active {
 .dashboard-panel h3 {
   color: #ffd700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   text-align: center;
 }
 
-.dashboard-panel button {
+.dashboard-panel .action-btn {
   padding: 10px 20px;
   background: linear-gradient(145deg, #32cd32, #228b22);
   color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  margin-top: 20px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   transition: all 0.3s ease;
 }
 
@@ -489,7 +505,7 @@ button[start]:active {
 .chart-panel h3 {
   color: #ffd700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
 }
 
 .chart-panel button {
@@ -499,7 +515,7 @@ button[start]:active {
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  margin-top: 15px;
+  /* margin-top: 15px; */
   transition: all 0.3s ease;
 }
 
@@ -530,14 +546,14 @@ button[start]:active {
 }
 
 .score-section {
-  margin-top: 2em;
+  /* margin-top: 2em; */
 }
 
 .score-section h3,
 .dashboard-panel .stats-cards {
   color: #ffd700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   text-align: center;
 }
 
@@ -545,7 +561,7 @@ button[start]:active {
   display: flex;
   flex-flow: row wrap;
   gap: 15px;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .stat-card {
@@ -591,7 +607,7 @@ button[start]:active {
 }
 
 .achievements {
-  margin: 30px 0;
+  /* margin: 30px 0; */
   text-align: center;
 }
 
@@ -655,7 +671,7 @@ button[start]:active {
 }
 
 .recent-games {
-  margin-top: 30px;
+  /* margin-top: 30px; */
 }
 
 .recent-games h4 {

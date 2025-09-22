@@ -33,22 +33,25 @@
       </div>
 
       <p id="message">🏴‍☠️ Welcome, treasure hunter! Ready to find the gold? 🏴‍☠️</p>
-      
+
       <div class="controls">
         <button class="control-btn" onclick="startNewGame()" start>⚓ Start New Adventure</button>
-        <button class="control-btn instructions-btn" popovertarget="instructions" >📜 Instructions</button>
-        <button class="control-btn dashboard-btn" popovertarget="dashboard" >📊 Dashboard</button>
-        <button class="control-btn chart-btn" popovertarget="score-chart" >📈 Score chart</button>
+        <button class="control-btn instructions-btn" popovertarget="instructions">📜 Instructions</button>
+        <button class="control-btn dashboard-btn" popovertarget="dashboard">📊 Dashboard</button>
+        <button class="control-btn chart-btn" popovertarget="score-chart">📈 Score chart</button>
       </div>
 
-      <div id="instructions" popover="auto" class="instructions-panel">
-        <h3>🗺️ How to Play</h3>
-        <p>🏴‍☠️ Click on the circles to search for the hidden treasure!</p>
-        <p>💰 Find the treasure in the fewest attempts to get a higher score!</p>
-        <p>⭐ Score = 10 - (number of attempts)</p>
-        <button popovertarget="instructions" popovertargetaction="hide">Got it!</button>
+      <div id="instructions" popover="auto">
+        <div class="instructions-panel">
+          <h3>🗺️ How to Play</h3>
+          <p>🏴‍☠️ Click on the circles to search for the hidden treasure!</p>
+          <p>💰 Find the treasure in the fewest attempts to get a higher score!</p>
+          <p>⭐ Score = 10 - (number of attempts)</p>
+          <button popovertarget="instructions" popovertargetaction="hide">Got it!</button>
+        </div>
+
       </div>
-      
+
       <div id="score-chart" popover="manual" class="chart-panel">
         <h3>📈 Score History</h3>
         <div id="stats"></div>
@@ -71,85 +74,118 @@
         </script>
         <button popovertarget="score-chart" popovertargetaction="hide">Close</button>
       </div>
-      
-      <div id="dashboard" popover="manual" class="dashboard-panel">
-        <h3>📊 Treasure Hunter Dashboard</h3>
-        
-        <!-- Main Stats Cards -->
-        <div class="stats-cards">
-          <div class="stat-card total-score">
-            <div class="stat-icon">💰</div>
-            <div class="stat-content">
-              <div class="stat-value" table-total>0</div>
-              <div class="stat-label">Total Doubloons</div>
-            </div>
-          </div>
-          
-          <div class="stat-card games-played">
-            <div class="stat-icon">🏴‍☠️</div>
-            <div class="stat-content">
-              <div class="stat-value" table-gameNr>0</div>
-              <div class="stat-label">Expeditions</div>
-            </div>
-          </div>
-          
-          <div class="stat-card average-score">
-            <div class="stat-icon">⭐</div>
-            <div class="stat-content">
-              <div class="stat-value" table-avg>0</div>
-              <div class="stat-label">Avg. Haul</div>
-            </div>
-          </div>
-          
-          <div class="stat-card best-score">
-            <div class="stat-icon">🏆</div>
-            <div class="stat-content">
-              <div class="stat-value" id="best-score">0</div>
-              <div class="stat-label">Best Haul</div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Achievement Badges -->
-        <div class="achievements">
-          <h4>🏆 Pirate Achievements</h4>
-          <div class="badge-container">
-            <div class="achievement-badge" id="perfect-shot-badge">
-              <span class="badge-icon">🎯</span>
-              <span class="badge-name">Perfect Shot</span>
-              <span class="badge-count" id="perfect-shots">0</span>
-            </div>
-            <div class="achievement-badge" id="quick-draw-badge" popovertarget="quick-draw-hint" popovertargetaction="show">
-              <span class="badge-icon">⚡</span>
-              <span class="badge-name">Quick Draw</span>
-              <span class="badge-count" id="quick-draws">0</span>
-            </div>
-            <span popover="hint" id="quick-draw-hint">Awarded for making a fast and accurate move!</span>
-            <div class="achievement-badge" id="treasure-master-badge">
-              <span class="badge-icon">👑</span>
-              <span class="badge-name">Treasure Master</span>
-              <span class="badge-count" id="treasure-master">0</span>
-            </div>
-            <div class="achievement-badge" id="persistent-badge">
-              <span class="badge-icon">🗡️</span>
-              <span class="badge-name">Persistent</span>
-              <span class="badge-count" id="persistent-count">0</span>
-            </div>
-          </div>
-        </div>
+      <div id="dashboard" popover="manual">
+        <div class="dashboard-panel">
+          <h3>📊 Treasure Hunter Dashboard</h3>
 
-        <!-- Leaderboard Style Recent Games -->
-        <div class="recent-games">
-          <h4>⚓ Recent Expeditions</h4>
-          <div class="games-list" id="recent-games-list">
-            <div class="no-games">🗺️ No expeditions yet, matey!</div>
+          <!-- Main Stats Cards -->
+          <div class="stats-cards">
+            <div class="stat-card total-score">
+              <div class="stat-icon">💰</div>
+              <div class="stat-content">
+                <div class="stat-value" table-total>0</div>
+                <div class="stat-label">Total Doubloons</div>
+              </div>
+            </div>
+
+            <div class="stat-card games-played">
+              <div class="stat-icon">🏴‍☠️</div>
+              <div class="stat-content">
+                <div class="stat-value" table-gameNr>0</div>
+                <div class="stat-label">Expeditions</div>
+              </div>
+            </div>
+
+            <div class="stat-card average-score">
+              <div class="stat-icon">⭐</div>
+              <div class="stat-content">
+                <div class="stat-value" table-avg>0</div>
+                <div class="stat-label">Avg. Haul</div>
+              </div>
+            </div>
+
+            <div class="stat-card best-score">
+              <div class="stat-icon">🏆</div>
+              <div class="stat-content">
+                <div class="stat-value" id="best-score">0</div>
+                <div class="stat-label">Best Haul</div>
+              </div>
+            </div>
           </div>
+
+          <!-- Achievement Badges -->
+          <div class="achievements">
+            <h4>🏆 Pirate Achievements</h4>
+            <div class="badge-container">
+              <div class="achievement-badge" id="perfect-shot-badge">
+                <span class="badge-icon">🎯</span>
+                <span class="badge-name">Perfect Shot</span>
+                <span class="badge-count" id="perfect-shots">0</span>
+                <button class="badge-info-btn" popovertarget="perfect-shot-hint" aria-label="Perfect Shot Info"
+                  style="background:none;border:none;box-shadow:none;padding:0;color:white;font-weight:100;">🛈</button>
+              </div>
+              <div popover="auto" id="perfect-shot-hint">
+                <div class="panel">
+                  Awarded for finding the treasure on your very first attempt in a game!
+                </div>
+              </div>
+              <div class="achievement-badge" id="quick-draw-badge">
+                <span class="badge-icon">⚡</span>
+                <span class="badge-name">Quick Draw</span>
+                <span class="badge-count" id="quick-draws">0</span>
+                <button class="badge-info-btn" popovertarget="quick-draw-hint" aria-label="Quick Draw Info"
+                  style="background:none;border:none;box-shadow:none;padding:0;color:white;font-weight:100;">🛈</button>
+              </div>
+              <div popover="auto" id="quick-draw-hint">
+                <div class="panel">
+                  Awarded for making a fast and accurate move!
+                </div>
+              </div>
+              <div class="achievement-badge" id="treasure-master-badge">
+                <span class="badge-icon">👑</span>
+                <span class="badge-name">Treasure Master</span>
+                <span class="badge-count" id="treasure-master">0</span>
+                <button class="badge-info-btn" popovertarget="master-hint" aria-label="Treasure Master Info"
+                  style="background:none;border:none;box-shadow:none;padding:0;color:white;font-weight:100;">🛈</button>
+              </div>
+              <div popover="auto" id="master-hint">
+                <div class="panel">
+                  Awarded for finding the treasure in three consecutive games with a score of 9 or higher!
+                </div>
+              </div>
+              <div class="achievement-badge" id="persistent-badge">
+                <span class="badge-icon">🗡️</span>
+                <span class="badge-name">Persistent</span>
+                <span class="badge-count" id="persistent-count">0</span>
+                <button class="badge-info-btn" popovertarget="persistent-hint" aria-label="Persistent Info"
+                  style="background:none;border:none;box-shadow:none;padding:0;color:white;font-weight:100;">🛈</button>
+              </div>
+              <div popover="auto" id="persistent-hint">
+                <div class="panel">
+                  Awarded for never giving up: play 10 or more games, regardless of your score!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leaderboard Style Recent Games -->
+          <div class="recent-games">
+            <h4>⚓ Recent Expeditions</h4>
+            <div class="games-list" id="recent-games-list">
+              <div class="no-games">🗺️ No expeditions yet, matey!</div>
+            </div>
+          </div>
+
+          <button class="action-btn" popovertarget="dashboard" popovertargetaction="hide">Close Dashboard</button>
+
+          <button class="action-btn reset-stats-btn" id="resetStatsBtn" popovertarget="reset-confirmation">🔄 Reset All
+            Stats</button>
+
         </div>
-        
-        <button popovertarget="dashboard" popovertargetaction="hide">Close Dashboard</button>
-        <button id="resetStatsBtn" popovertarget="reset-confirmation" class="reset-stats-btn">🔄 Reset All Stats</button>
       </div>
-      
+
+
       <div id="reset-confirmation" popover class="confirmation-panel">
         <h3>⚠️ Confirm Reset</h3>
         <p>Are you sure you want to reset all your treasure hunting statistics?</p>
@@ -160,7 +196,7 @@
         </div>
       </div>
     </main>
-    
+
     <script src="./gameScript.js"></script>
   </body>
 
