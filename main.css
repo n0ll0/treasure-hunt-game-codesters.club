@@ -2,11 +2,28 @@
   box-sizing: border-box;
 }
 
+/* Mobile-first responsive design */
+html {
+  font-size: 16px; /* Base font size for mobile */
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 18px; /* Slightly larger for tablets */
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 20px; /* Larger for desktop */
+  }
+}
+
 .button {
-  width: 100px;
-  height: 100px;
+  width: 4rem;
+  height: 4rem;
   background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
-  border: 0.3em solid #2c5aa0;
+  border: 0.15rem solid #2c5aa0;
   border-radius: 50%;
   text-align: center;
   cursor: pointer;
@@ -14,7 +31,27 @@
   position: relative;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   display: table-cell;
-  font-size: 2em;
+  font-size: 1.5rem;
+  vertical-align: middle;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .button {
+    width: 5rem;
+    height: 5rem;
+    border: 0.2rem solid #2c5aa0;
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .button {
+    width: 6rem;
+    height: 6rem;
+    border: 0.3rem solid #2c5aa0;
+    font-size: 2rem;
+  }
 }
 
 .button:hover {
@@ -29,26 +66,63 @@
 
 table.game {
   background: linear-gradient(145deg, #8b4513, #a0522d);
-  border-radius: 20px;
-  padding: 2.5em;
+  border-radius: 1rem;
+  padding: 1.5rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  border: 4px solid #654321;
+  border: 3px solid #654321;
+  border-spacing: 0.5rem;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  table.game {
+    padding: 2rem;
+    border-radius: 1.25rem;
+    border: 4px solid #654321;
+    border-spacing: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  table.game {
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    border-spacing: 1rem;
+  }
 }
 
 table.game::before {
   content: "🏴‍☠️ TREASURE HUNT 🏴‍☠️";
   position: absolute;
-  top: -50px;
+  top: -2.5rem;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(45deg, #ffd700, #ffed4e);
   color: #8b4513;
-  padding: 10px 30px;
-  border-radius: 25px;
+  padding: 0.5rem 1rem;
+  border-radius: 1.25rem;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 0.9rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  table.game::before {
+    top: -3rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  table.game::before {
+    top: -3.5rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+  }
 }
 
 table.game {
@@ -60,13 +134,26 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 6em 4em 4em;
+  padding: 2rem 1rem 6rem; /* Extra bottom padding for mobile controls */
   min-height: 100vh;
   color: #fff;
 }
 
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  main {
+    padding: 3rem 2rem 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    padding: 4rem 3rem 4rem;
+  }
+}
+
 * {
-  font-size: 24px;
+  font-size: 1rem; /* Use rem units for responsive scaling */
   font-family: 'Arial', sans-serif;
 }
 
@@ -77,16 +164,35 @@ body {
 }
 
 button[start] {
-  padding: 15px 40px;
+  padding: 0.75rem 1.5rem;
   background: linear-gradient(145deg, #32cd32, #228b22);
   color: white;
   border: none;
-  border-radius: 25px;
-  font-size: 1.2em;
+  border-radius: 1.25rem;
+  font-size: 0.9rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(50, 205, 50, 0.3);
+  flex: 1;
+  max-width: 200px;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  button[start] {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    flex: none;
+    max-width: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  button[start] {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.2rem;
+  }
 }
 
 button[start]:hover {
@@ -100,33 +206,123 @@ button[start]:active {
 }
 
 #message {
-  font-size: 1.5em;
+  font-size: 1.1rem;
   font-weight: bold;
   color: #ffd700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  margin: 20px 0;
-  min-height: 40px;
+  margin: 1rem 0;
+  min-height: 2.5rem;
   display: flex;
   align-items: center;
+  text-align: center;
+  padding: 0 1rem;
 }
 
-button#resetStats {
-  position: fixed;
-  right: 2em;
-  bottom: 2em;
-  padding: 10px 20px;
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  #message {
+    font-size: 1.3rem;
+    margin: 1.25rem 0;
+    min-height: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  #message {
+    font-size: 1.5rem;
+    margin: 1.5rem 0;
+    min-height: 3.5rem;
+  }
+}
+
+/* Reset stats button moved to dashboard - remove old styling */
+
+.reset-stats-btn {
+  padding: 0.75rem 1.5rem;
   background: linear-gradient(145deg, #ff6b6b, #ee5a52);
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  margin-top: 1rem;
+  width: 100%;
+  font-weight: bold;
 }
 
-button#resetStats:hover {
+.reset-stats-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.confirmation-panel {
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  max-width: 400px;
+  text-align: center;
+  border: 2px solid #ff6b6b;
+}
+
+.confirmation-panel::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.confirmation-panel h3 {
+  color: #ff6b6b;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.confirmation-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-direction: column;
+}
+
+@media (min-width: 480px) {
+  .confirmation-buttons {
+    flex-direction: row;
+  }
+}
+
+.confirm-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  flex: 1;
+}
+
+.confirm-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+.cancel-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(145deg, #6c757d, #5a6269);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  flex: 1;
+}
+
+.cancel-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
 }
 
 #scoreElement {
@@ -154,24 +350,76 @@ button#resetStats:hover {
 }
 
 .controls {
+  /* Mobile: Fixed bottom bar */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
-  gap: 15px;
-  margin: 20px 0;
-  flex-wrap: wrap;
-  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(30, 60, 114, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 2px solid rgba(255, 215, 0, 0.3);
+  z-index: 100;
+  justify-content: space-around;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Tablet and desktop: Normal layout */
+@media (min-width: 768px) {
+  .controls {
+    position: static;
+    background: transparent;
+    backdrop-filter: none;
+    border-top: none;
+    box-shadow: none;
+    margin: 1.25rem 0;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .controls {
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
 }
 
 .instructions-btn {
-  padding: 12px 25px;
+  padding: 0.75rem 1rem;
   background: linear-gradient(145deg, #4a90e2, #357abd);
   color: white;
   border: none;
-  border-radius: 25px;
-  font-size: 1em;
+  border-radius: 1.25rem;
+  font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .instructions-btn {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    flex: none;
+    min-height: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .instructions-btn {
+    padding: 1.25rem 2rem;
+  }
 }
 
 .instructions-btn:hover {
@@ -180,16 +428,37 @@ button#resetStats:hover {
 }
 
 .dashboard-btn {
-  padding: 12px 25px;
+  padding: 0.75rem 1rem;
   background: linear-gradient(145deg, #ff6b6b, #ee5a52);
   color: white;
   border: none;
-  border-radius: 25px;
-  font-size: 1em;
+  border-radius: 1.25rem;
+  font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .dashboard-btn {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    flex: none;
+    min-height: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-btn {
+    padding: 1.25rem 2rem;
+  }
 }
 
 .dashboard-btn:hover {
@@ -198,16 +467,37 @@ button#resetStats:hover {
 }
 
 .chart-btn {
-  padding: 12px 25px;
+  padding: 0.75rem 1rem;
   background: linear-gradient(145deg, #ffd700, #ffed4e);
   color: #8b4513;
   border: none;
-  border-radius: 25px;
-  font-size: 1em;
+  border-radius: 1.25rem;
+  font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .chart-btn {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    flex: none;
+    min-height: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chart-btn {
+    padding: 1.25rem 2rem;
+  }
 }
 
 .chart-btn:hover {

@@ -129,10 +129,20 @@
         </div>
         
         <button popovertarget="dashboard" popovertargetaction="hide">Close Dashboard</button>
+        <button id="resetStatsBtn" popovertarget="reset-confirmation" class="reset-stats-btn">🔄 Reset All Stats</button>
+      </div>
+      
+      <div id="reset-confirmation" popover class="confirmation-panel">
+        <h3>⚠️ Confirm Reset</h3>
+        <p>Are you sure you want to reset all your treasure hunting statistics?</p>
+        <p><strong>This action cannot be undone!</strong></p>
+        <div class="confirmation-buttons">
+          <button onclick="resetGameStats()" class="confirm-btn">🔄 Yes, Reset Everything</button>
+          <button popovertarget="reset-confirmation" popovertargetaction="hide" class="cancel-btn">❌ Cancel</button>
+        </div>
       </div>
     </main>
     
-    <button id="resetStats" onclick="resetGameStats()">🔄 Reset Stats</button>
     <script src="./gameScript.js"></script>
   </body>
 

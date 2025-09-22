@@ -323,6 +323,17 @@ function startNewGame() {
 }
 
 function resetGameStats() {
+  // Close the confirmation dialog first
+  const confirmDialog = document.getElementById('reset-confirmation');
+  if (confirmDialog) {
+    confirmDialog.hidePopover();
+  }
+  // Close dashboard dialog too
+  const dashboard = document.getElementById('dashboard');
+  if (dashboard) {
+    dashboard.hidePopover();
+  }
+  
   localStorage.clear();
   window.location.reload();
 }
