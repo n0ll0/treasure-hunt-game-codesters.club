@@ -81,7 +81,6 @@ button[start] {
   font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
-  margin: 20px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(50, 205, 50, 0.3);
 }
