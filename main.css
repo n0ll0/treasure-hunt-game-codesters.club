@@ -542,8 +542,6 @@ button[start]:active {
 }
 
 .dashboard-panel .stats-cards {
-  /* display: grid; */
-  /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
   display: flex;
   flex-flow: row wrap;
   gap: 15px;
