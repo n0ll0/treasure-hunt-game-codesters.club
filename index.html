@@ -35,13 +35,13 @@
       <p id="message">🏴‍☠️ Welcome, treasure hunter! Ready to find the gold? 🏴‍☠️</p>
       
       <div class="controls">
-        <button onclick="startNewGame()" start>⚓ Start New Adventure</button>
-        <button popovertarget="instructions" class="instructions-btn">📜 Instructions</button>
-        <button popovertarget="dashboard" class="dashboard-btn">📊 Dashboard</button>
-        <button popovertarget="score-chart" class="chart-btn">📈 Score Chart</button>
+        <button class="control-btn" onclick="startNewGame()" start>⚓ Start New Adventure</button>
+        <button class="control-btn instructions-btn" popovertarget="instructions" >📜 Instructions</button>
+        <button class="control-btn dashboard-btn" popovertarget="dashboard" >📊 Dashboard</button>
+        <button class="control-btn chart-btn" popovertarget="score-chart" >📈 Score chart</button>
       </div>
 
-      <div id="instructions" popover class="instructions-panel">
+      <div id="instructions" popover="auto" class="instructions-panel">
         <h3>🗺️ How to Play</h3>
         <p>🏴‍☠️ Click on the circles to search for the hidden treasure!</p>
         <p>💰 Find the treasure in the fewest attempts to get a higher score!</p>
@@ -49,13 +49,30 @@
         <button popovertarget="instructions" popovertargetaction="hide">Got it!</button>
       </div>
       
-      <div id="score-chart" popover class="chart-panel">
+      <div id="score-chart" popover="manual" class="chart-panel">
         <h3>📈 Score History</h3>
-        <div id="stats" style="width:100%;max-width:500px"></div>
+        <div id="stats"></div>
+        <script>
+          const container = document.getElementById('score-chart');
+          function updateStatsSize() {
+            const stats = document.getElementById('stats');
+            if (!stats || !container) return;
+            const rect = container.getBoundingClientRect();
+            stats.style.width = Math.max(window.innerWidth < 540 ? 250 : 500, rect.width * 0.8) + 'px';
+            stats.style.height = (window.innerHeight < 400 ? 300 : 380) + 'px';
+            // Refresh Plotly chart if it exists
+            if (window.Plotly && stats.children.length > 0) {
+              Plotly.Plots.resize(stats);
+            }
+          }
+          window.addEventListener('resize', updateStatsSize);
+          container.addEventListener("toggle", updateStatsSize);
+          updateStatsSize();
+        </script>
         <button popovertarget="score-chart" popovertargetaction="hide">Close</button>
       </div>
       
-      <div id="dashboard" popover class="dashboard-panel">
+      <div id="dashboard" popover="manual" class="dashboard-panel">
         <h3>📊 Treasure Hunter Dashboard</h3>
         
         <!-- Main Stats Cards -->
@@ -102,11 +119,12 @@
               <span class="badge-name">Perfect Shot</span>
               <span class="badge-count" id="perfect-shots">0</span>
             </div>
-            <div class="achievement-badge" id="quick-draw-badge">
+            <div class="achievement-badge" id="quick-draw-badge" popovertarget="quick-draw-hint" popovertargetaction="show">
               <span class="badge-icon">⚡</span>
               <span class="badge-name">Quick Draw</span>
               <span class="badge-count" id="quick-draws">0</span>
             </div>
+            <span popover="hint" id="quick-draw-hint">Quick draawdwa</span>
             <div class="achievement-badge" id="treasure-master-badge">
               <span class="badge-icon">👑</span>
               <span class="badge-name">Treasure Master</span>

@@ -65,7 +65,7 @@ function refreshScoreboard(score) {
         ...layout,
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
-        font: { color: '#fff' }
+        font: { color: '#fff' },
       });
     } else {
       // Fallback: Create a simple CSS-based chart

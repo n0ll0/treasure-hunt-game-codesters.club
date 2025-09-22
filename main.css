@@ -164,7 +164,7 @@ body {
   position: relative;
   overflow-x: hidden;
 }
-
+/* 
 body::before {
   content: '';
   position: fixed;
@@ -173,55 +173,26 @@ body::before {
   transform: translateX(-50%);
   width: 100vw;
   height: 60vh;
-  background-image: url("./deserted-island.svg");
+  background-image: url("./tropical-island-with-trees.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center bottom;
   opacity: 0.3;
   z-index: -1;
   pointer-events: none;
-}
-
+} */
+/* 
 @media (min-width: 768px) {
   body::before {
     height: 50vh;
     opacity: 0.4;
   }
-}
+} */
 
 button[start] {
-  padding: 0.5rem 1rem;
+  /*  */
   background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  border: none;
-  border-radius: 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-  white-space: nowrap;
-}
-
-button[start]:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-  background: linear-gradient(135deg, #34d399, #10b981);
-}
-
-/* Desktop adjustments */
-@media (min-width: 768px) {
-  button[start] {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  button[start] {
-    padding: 1.25rem 2.5rem;
-    font-size: 1.2rem;
-  }
 }
 
 button[start]:hover {
@@ -389,31 +360,11 @@ button[start]:active {
   z-index: 100;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: calc(100vw - 2rem);
+  /* max-width: calc(100vw - 2rem); */
 }
 
-/* Tablet and desktop: Normal layout */
-@media (min-width: 768px) {
-  .controls {
-    position: static;
-    transform: none;
-    margin: 1.25rem 0;
-    justify-content: center;
-    gap: 1rem;
-    max-width: none;
-  }
-}
-
-@media (min-width: 1024px) {
-  .controls {
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-  }
-}
-
-.instructions-btn {
-  padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+.control-btn {
+  padding: 0.5rem;
   color: white;
   border: none;
   border-radius: 0.75rem;
@@ -425,24 +376,14 @@ button[start]:active {
   white-space: nowrap;
 }
 
+.instructions-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
 .instructions-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
   background: linear-gradient(135deg, #60a5fa, #3b82f6);
-}
-
-/* Desktop adjustments */
-@media (min-width: 768px) {
-  .instructions-btn {
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .instructions-btn {
-    padding: 1.25rem 2rem;
-  }
 }
 
 .instructions-btn:hover {
@@ -451,7 +392,7 @@ button[start]:active {
 }
 
 .dashboard-btn {
-  padding: 0.5rem 1rem;
+  /*  */
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
   border: none;
@@ -465,32 +406,12 @@ button[start]:active {
 }
 
 .dashboard-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-  background: linear-gradient(135deg, #f87171, #ef4444);
-}
-
-/* Desktop adjustments */
-@media (min-width: 768px) {
-  .dashboard-btn {
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .dashboard-btn {
-    padding: 1.25rem 2rem;
-  }
-}
-
-.dashboard-btn:hover {
   transform: translateY(-2px);
+  background: linear-gradient(135deg, #f87171, #ef4444);
   box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
 }
 
 .chart-btn {
-  padding: 0.5rem 1rem;
   background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
   border: none;
@@ -507,20 +428,6 @@ button[start]:active {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
-}
-
-/* Desktop adjustments */
-@media (min-width: 768px) {
-  .chart-btn {
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .chart-btn {
-    padding: 1.25rem 2rem;
-  }
 }
 
 .chart-btn:hover {
@@ -593,7 +500,7 @@ button[start]:active {
   padding: 25px;
   border-radius: 15px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  max-width: 600px;
+  max-width: min(600px, 100vw);
   border: 2px solid #ffd700;
   text-align: center;
 }
@@ -659,18 +566,21 @@ button[start]:active {
 }
 
 .dashboard-panel .stats-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* display: grid; */
+  /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
+  display: flex;
+  flex-flow: row wrap;
   gap: 15px;
   margin-bottom: 30px;
 }
 
 .stat-card {
+  flex: 1;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 20px;
+  border-radius: 0.8rem;
+  padding: 1rem;
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  outline: 2px solid #ffffff33;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -678,12 +588,11 @@ button[start]:active {
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
 }
 
 .stat-icon {
-  font-size: 2.5em;
+  font-size: 2em;
   opacity: 0.8;
 }
 
@@ -693,7 +602,7 @@ button[start]:active {
 }
 
 .stat-value {
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: bold;
   color: #ffd700;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
@@ -701,7 +610,7 @@ button[start]:active {
 
 .stat-label {
   color: #fff;
-  font-size: 0.9em;
+  font-size: 0.8em;
   opacity: 0.8;
   margin-top: 5px;
 }
