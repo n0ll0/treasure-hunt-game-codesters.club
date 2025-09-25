@@ -73,6 +73,10 @@ table.game {
   border-spacing: 0.5rem;
 }
 
+table.game td.button:active {
+  outline: 3px dotted red;
+}
+
 /* Desktop adjustments */
 @media (min-width: 768px) {
   table.game {

@@ -12,24 +12,79 @@
   <body>
 
     <main>
-      <div class="game-container">
-        <table class="game">
+      <!-- Improved: Keyboard-accessible 3x3 grid using ARIA roles and tabindex -->
+      <table class="game" role="radiogroup" aria-label="Treasure Hunt Grid">
+        <tbody>
           <tr>
-            <td class="button"></td>
-            <td class="button"></td>
-            <td class="button"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="1" class="button" data-row="0" data-col="0"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="2" class="button" data-row="0" data-col="1"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="3" class="button" data-row="0" data-col="2"></td>
           </tr>
           <tr>
-            <td class="button"></td>
-            <td class="button"></td>
-            <td class="button"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="4" class="button" data-row="1" data-col="0"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="5" class="button" data-row="1" data-col="1"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="6" class="button" data-row="1" data-col="2"></td>
           </tr>
           <tr>
-            <td class="button"></td>
-            <td class="button"></td>
-            <td class="button"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="7" class="button" data-row="2" data-col="0"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="8" class="button" data-row="2" data-col="1"></td>
+            <td role="radio" aria-roledescription="radio" tabindex="9" class="button" data-row="2" data-col="2"></td>
           </tr>
-        </table>
+        </tbody>
+      </table>
+      <script>
+        // Keyboard navigation and radio group logic for the grid
+        const gridSize = 3;
+        function getCell(row, col) {
+          return document.querySelector(
+            `.game button[data-row="${row}"][data-col="${col}"]`
+          );
+        }
+        function handleCellClick(btn) {
+          // Set aria-checked and tabindex for all buttons
+          document.querySelectorAll('.game button').forEach(b => {
+            b.setAttribute('aria-checked', 'false');
+            b.tabIndex = -1;
+          });
+          btn.setAttribute('aria-checked', 'true');
+          btn.tabIndex = 0;
+          btn.focus();
+          // Call your game logic here if needed
+          if (typeof cellSelected === 'function') cellSelected(btn);
+        }
+        function handleCellKeydown(e, btn) {
+          const row = +btn.dataset.row, col = +btn.dataset.col;
+          let nextRow = row, nextCol = col;
+          switch (e.key) {
+            case 'ArrowUp':
+              nextRow = (row + gridSize - 1) % gridSize;
+              break;
+            case 'ArrowDown':
+              nextRow = (row + 1) % gridSize;
+              break;
+            case 'ArrowLeft':
+              nextCol = (col + gridSize - 1) % gridSize;
+              break;
+            case 'ArrowRight':
+              nextCol = (col + 1) % gridSize;
+              break;
+            case ' ':
+            case 'Enter':
+              btn.click();
+              return;
+            default:
+              return;
+          }
+          e.preventDefault();
+          const nextBtn = getCell(nextRow, nextCol);
+          if (nextBtn) handleCellClick(nextBtn);
+        }
+        // Ensure only one button is tabbable at start
+        window.addEventListener('DOMContentLoaded', () => {
+          const first = getCell(0, 0);
+          if (first) first.tabIndex = 0;
+        });
+      </script>
       </div>
 
       <p id="message">🏴‍☠️ Welcome, treasure hunter! Ready to find the gold? 🏴‍☠️</p>
@@ -191,7 +246,8 @@
               <p><b>This action cannot be undone!</b></p>
               <div class="confirmation-buttons">
                 <button onclick="resetGameStats()" class="confirm-btn">🔄 Yes, Reset Everything</button>
-                <button popovertarget="reset-confirmation" popovertargetaction="hide" class="cancel-btn">❌ Cancel</button>
+                <button popovertarget="reset-confirmation" popovertargetaction="hide" class="cancel-btn">❌
+                  Cancel</button>
               </div>
             </div>
           </div>
