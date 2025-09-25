@@ -19,7 +19,7 @@ html {
   }
 }
 
-.button {
+.game .button {
   width: 4rem;
   height: 4rem;
   background: linear-gradient(145deg, #f0f8ff, #e6f3ff);

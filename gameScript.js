@@ -1,5 +1,5 @@
 "use strict";
-const buttons = document.querySelectorAll("td.button");
+const buttons = document.querySelectorAll("table.game .button");
 const message = document.getElementById("message");
 
 var gameNumber = 0;

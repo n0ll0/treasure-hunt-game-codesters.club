@@ -14,22 +14,22 @@
 
     <main>
       <!-- Improved: Keyboard-accessible 3x3 grid using ARIA roles and tabindex -->
-      <table class="game" role="radiogroup" aria-label="Treasure Hunt Grid">
+      <table class="game" aria-label="Treasure Hunt Grid">
         <tbody>
           <tr>
-            <td role="radio" aria-roledescription="radio" tabindex="1" class="button" data-row="0" data-col="0"></td>
-            <td role="radio" aria-roledescription="radio" tabindex="2" class="button" data-row="0" data-col="1"></td>
-            <td role="radio" aria-roledescription="radio" tabindex="3" class="button" data-row="0" data-col="2"></td>
+            <td><button class="button"></button></td>
+            <td><button class="button"></button></td>
+            <td><button class="button"></button></td>
           </tr>
           <tr>
-            <td role="radio" aria-roledescription="radio" tabindex="4" class="button" data-row="1" data-col="0"></td>
-            <td role="radio" aria-roledescription="radio" tabindex="5" class="button" data-row="1" data-col="1"></td>
-            <td role="radio" aria-roledescription="radio" tabindex="6" class="button" data-row="1" data-col="2"></td>
+            <td><button class="button"></button></td>
+            <td><button class="button"></button></td>
+            <td><button class="button"></button></td>
           </tr>
           <tr>
-            <td role="radio" aria-roledescription="radio" tabindex="7" class="button" data-row="2" data-col="0"></td>
-            <td role="radio" aria-roledescription="radio" tabindex="8" class="button" data-row="2" data-col="1"></td>
-            <td role="radio" aria-roledescription="radio" tabindex="9" class="button" data-row="2" data-col="2"></td>
+            <td><button class="button"></button></td>
+            <td><button class="button"></button></td>
+            <td><button class="button"></button></td>
           </tr>
         </tbody>
       </table>
@@ -76,7 +76,7 @@
             default:
               return;
           }
-          e.preventDefault();
+          e.prevenbuttonefault();
           const nextBtn = getCell(nextRow, nextCol);
           if (nextBtn) handleCellClick(nextBtn);
         }
