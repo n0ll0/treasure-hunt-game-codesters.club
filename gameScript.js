@@ -16,7 +16,10 @@ const achievements = {
   perfectShots: 0,
   quickDraws: 0,
   treasureMaster: 0,
-  persistent: 0
+  persistent: 0,
+  boardMaster: 0,
+  treasureHoarder: 0,
+  cleanSlate: 0
 };
 
 // Recent games tracking
@@ -120,11 +123,23 @@ function updateAchievements() {
   document.getElementById('treasure-master').textContent = achievements.treasureMaster || 0;
   document.getElementById('persistent-count').textContent = achievements.persistent || 0;
   
+  // Update new achievements
+  const boardMasterEl = document.getElementById('board-master-count');
+  const treasureHoarderEl = document.getElementById('treasure-hoarder-count');
+  const cleanSlateEl = document.getElementById('clean-slate-count');
+  
+  if (boardMasterEl) boardMasterEl.textContent = achievements.boardMaster || 0;
+  if (treasureHoarderEl) treasureHoarderEl.textContent = achievements.treasureHoarder || 0;
+  if (cleanSlateEl) cleanSlateEl.textContent = achievements.cleanSlate || 0;
+  
   // Add earned class to badges with counts > 0
   updateBadgeStatus('perfect-shot-badge', achievements.perfectShots);
   updateBadgeStatus('quick-draw-badge', achievements.quickDraws);
   updateBadgeStatus('treasure-master-badge', achievements.treasureMaster);
   updateBadgeStatus('persistent-badge', achievements.persistent);
+  updateBadgeStatus('board-master-badge', achievements.boardMaster);
+  updateBadgeStatus('treasure-hoarder-badge', achievements.treasureHoarder);
+  updateBadgeStatus('clean-slate-badge', achievements.cleanSlate);
 }
 
 function updateBadgeStatus(badgeId, count) {
@@ -194,7 +209,16 @@ class Game {
   }
 
   #randomizeTreasure() {
-    this.#treasure = this.#buttons[Math.floor(Math.random() * this.#buttons.length)];
+    // Only select from buttons that don't already have treasure
+    const availableButtons = Array.from(this.#buttons).filter(btn => !btn.hasAttribute("treasure"));
+    
+    if (availableButtons.length === 0) {
+      // All buttons have treasure - board is complete!
+      this.#treasure = null;
+      return;
+    }
+    
+    this.#treasure = availableButtons[Math.floor(Math.random() * availableButtons.length)];
   }
 
   #clickButton(event) {
@@ -292,7 +316,7 @@ class Game {
 
   killGame() {
     this.#buttons.forEach(btn => {
-      btn.removeAttribute("treasure");
+      // Keep treasures persistent, only remove clicked state
       btn.removeAttribute("clicked");
     });
   }
@@ -303,22 +327,111 @@ class Game {
  * Handle the play again button click
  */
 function startNewGame() {
+  // Check if board is completely filled
+  const treasureCount = Array.from(buttons).filter(btn => btn.hasAttribute("treasure")).length;
+  
+  if (treasureCount === 9) {
+    // Board is full! Show special celebration
+    showBoardCompletionCelebration();
+    return;
+  }
+  
   if (game.state) {
     game.state.killGame()
     delete game.state;
   };
 
   game.state = new Game(buttons);
+  
+  // Check if no treasure could be placed (board full)
+  if (!game.state || (game.state.ended && treasureCount === 9)) {
+    showBoardCompletionCelebration();
+    return;
+  }
 
   // Clear message and add starting message
-  message.textContent = "🏴‍☠️ Ahoy! Click to find the hidden treasure! 🏴‍☠️";
+  const remainingSpots = 9 - treasureCount;
+  if (treasureCount > 0) {
+    message.textContent = `🏴‍☠️ ${treasureCount} treasure${treasureCount > 1 ? 's' : ''} found! ${remainingSpots} spot${remainingSpots > 1 ? 's' : ''} left! 🏴‍☠️`;
+  } else {
+    message.textContent = "🏴‍☠️ Ahoy! Click to find the hidden treasure! 🏴‍☠️";
+  }
   refreshScoreboard();
 
   document.querySelector('[start]').style.display = "none";
   
-  // Add starting animation to buttons
+  // Add starting animation to buttons without treasure
   buttons.forEach((btn, index) => {
-    btn.style.animation = `buttonAppear 0.5s ease-out ${index * 0.1}s both`;
+    if (!btn.hasAttribute("treasure")) {
+      btn.style.animation = `buttonAppear 0.5s ease-out ${index * 0.1}s both`;
+    }
+  });
+}
+
+function showBoardCompletionCelebration() {
+  message.textContent = "🎊 LEGENDARY! ALL TREASURES FOUND! 🎊";
+  
+  // Award Board Master achievement
+  achievements.boardMaster = (achievements.boardMaster || 0) + 1;
+  localStorage.setItem('achievements', JSON.stringify(achievements));
+  
+  // Massive celebration effect
+  for (let i = 0; i < 50; i++) {
+    setTimeout(() => {
+      createBoardCompletionParticle();
+    }, i * 50);
+  }
+  
+  // Show special completion message with options
+  setTimeout(() => {
+    const continueMsg = confirm(
+      "🏆 BOARD MASTER ACHIEVEMENT! 🏆\n\n" +
+      "You've filled the entire board with treasures!\n" +
+      `Board Master Count: ${achievements.boardMaster}\n\n` +
+      "Click OK to reset the board and start fresh,\n" +
+      "or Cancel to admire your treasure collection!"
+    );
+    
+    if (continueMsg) {
+      clearBoardTreasures();
+      startNewGame();
+    }
+  }, 2000);
+  
+  refreshScoreboard();
+}
+
+function createBoardCompletionParticle() {
+  const particle = document.createElement('div');
+  particle.className = 'celebration-particle';
+  particle.innerHTML = ['💰', '💎', '🏆', '👑', '⭐', '✨', '🎉', '🎊'][Math.floor(Math.random() * 8)];
+  particle.style.cssText = `
+    position: fixed;
+    font-size: ${2 + Math.random() * 2}em;
+    pointer-events: none;
+    z-index: 1000;
+    left: ${Math.random() * window.innerWidth}px;
+    top: ${window.innerHeight}px;
+    animation: floatUp ${3 + Math.random() * 2}s ease-out forwards;
+  `;
+  
+  document.body.appendChild(particle);
+  
+  setTimeout(() => {
+    if (particle.parentNode) {
+      particle.parentNode.removeChild(particle);
+    }
+  }, 5000);
+}
+
+function clearBoardTreasures() {
+  // Award Clean Slate achievement
+  achievements.cleanSlate = (achievements.cleanSlate || 0) + 1;
+  localStorage.setItem('achievements', JSON.stringify(achievements));
+  
+  buttons.forEach(btn => {
+    btn.removeAttribute("treasure");
+    btn.removeAttribute("clicked");
   });
 }
 
@@ -350,6 +463,9 @@ function calcAndStoreScores(attempts) {
   let score = Math.max(1, 10 - attempts);
   let bonusMessage = "";
   
+  // Count total treasures found
+  const treasureCount = Array.from(buttons).filter(btn => btn.hasAttribute("treasure")).length;
+  
   // Bonus for perfect games (finding in 1 try)
   if (attempts === 1) {
     score += 5;
@@ -372,6 +488,16 @@ function calcAndStoreScores(attempts) {
   // Persistent achievement (games played)
   if (Scores.gameNr + 1 >= 10) {
     achievements.persistent = Math.floor((Scores.gameNr + 1) / 10);
+  }
+  
+  // Treasure Hoarder achievement (total treasures collected)
+  const totalTreasures = Scores.gameNr + 1; // Each game adds one treasure
+  achievements.treasureHoarder = Math.floor(totalTreasures / 5); // Award every 5 treasures
+  
+  // Progressive board bonus
+  if (treasureCount >= 5) {
+    score += treasureCount - 4;
+    bonusMessage += ` 💎 BOARD PROGRESS BONUS! +${treasureCount - 4} points!`;
   }
   
   // Store game in recent games
