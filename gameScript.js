@@ -279,6 +279,8 @@ class Game {
     this.#buttons.forEach(btn => {
       btn.onclick = null;
     });
+    
+    updateBoardProgress();
     calcAndStoreScores(this.attempts);
   }
 
@@ -326,6 +328,23 @@ class Game {
 /**
  * Handle the play again button click
  */
+function updateBoardProgress() {
+  const treasureCount = Array.from(buttons).filter(btn => btn.hasAttribute("treasure")).length;
+  const progressFill = document.getElementById('progress-fill');
+  const progressText = document.getElementById('progress-text');
+  
+  if (progressFill && progressText) {
+    const percentage = (treasureCount / 9) * 100;
+    progressFill.style.width = `${percentage}%`;
+    progressText.textContent = `${treasureCount}/9 Treasures`;
+    
+    // Add pulse animation when close to completion
+    if (treasureCount >= 7) {
+      progressFill.style.animation = 'pulse 1s infinite';
+    }
+  }
+}
+
 function startNewGame() {
   // Check if board is completely filled
   const treasureCount = Array.from(buttons).filter(btn => btn.hasAttribute("treasure")).length;
@@ -356,6 +375,8 @@ function startNewGame() {
   } else {
     message.textContent = "🏴‍☠️ Ahoy! Click to find the hidden treasure! 🏴‍☠️";
   }
+  
+  updateBoardProgress();
   refreshScoreboard();
 
   document.querySelector('[start]').style.display = "none";
@@ -433,6 +454,8 @@ function clearBoardTreasures() {
     btn.removeAttribute("treasure");
     btn.removeAttribute("clicked");
   });
+  
+  updateBoardProgress();
 }
 
 function resetGameStats() {

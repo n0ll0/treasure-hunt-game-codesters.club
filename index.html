@@ -90,6 +90,14 @@
 
       <p id="message">🏴‍☠️ Welcome, treasure hunter! Ready to find the gold? 🏴‍☠️</p>
 
+      <div id="board-progress" class="board-progress">
+        <div class="progress-label">Board Progress</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0/9 Treasures</div>
+      </div>
+
       <div class="controls">
         <button class="control-btn" onclick="startNewGame()" start>⚓ Start New Adventure</button>
         <button class="control-btn instructions-btn" popovertarget="instructions">📜 Instructions</button>
@@ -103,6 +111,8 @@
           <p>🏴‍☠️ Click on the circles to search for the hidden treasure!</p>
           <p>💰 Find the treasure in the fewest attempts to get a higher score!</p>
           <p>⭐ Score = 10 - (number of attempts)</p>
+          <p><strong>🎯 NEW FEATURE:</strong> Treasures persist across games! Fill all 9 spots on the board to earn the legendary <strong>Board Master</strong> achievement and unlock massive rewards!</p>
+          <p>🏆 The more treasures on the board, the higher your bonus points!</p>
           <button popovertarget="instructions" popovertargetaction="hide">Got it!</button>
         </div>
 
