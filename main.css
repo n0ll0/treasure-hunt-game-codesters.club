@@ -803,7 +803,7 @@ button[start]:active {
   }
 }
 
-.button[treasure] {
+.button[treasure="true"] {
   background: linear-gradient(145deg, #ffd700, #ffed4e) !important;
   color: #8b4513;
   border-color: #daa520;
@@ -811,7 +811,7 @@ button[start]:active {
   box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
 }
 
-.button[treasure]::before {
+.button[treasure="true"]::before {
   content: "💰";
   font-size: 1.5em;
   animation: treasureBounce 0.8s ease-in-out infinite;

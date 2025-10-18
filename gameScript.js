@@ -210,15 +210,15 @@ class Game {
 
   #randomizeTreasure() {
     // Only select from buttons that don't already have treasure
-    const availableButtons = Array.from(this.#buttons).filter(btn => !btn.hasAttribute("treasure"));
+    // const availableButtons = Array.from(this.#buttons).filter(btn => !btn.hasAttribute("treasure"));
     
-    if (availableButtons.length === 0) {
-      // All buttons have treasure - board is complete!
-      this.#treasure = null;
-      return;
-    }
+    // if (availableButtons.length === 0) {
+    //   // All buttons have treasure - board is complete!
+    //   this.#treasure = null;
+    //   return;
+    // }
     
-    this.#treasure = availableButtons[Math.floor(Math.random() * availableButtons.length)];
+    this.#treasure = this.#buttons[Math.floor(Math.random() * this.#buttons.length)];
   }
 
   #clickButton(event) {
@@ -235,6 +235,10 @@ class Game {
     }, 150);
 
     button.setAttribute("clicked", true);
+    // console.warn("button.getAttribute('treasure')", button.getAttribute('treasure'))
+    if (button.getAttribute('treasure')==true || button.getAttribute('treasure')=='true') {
+      button.setAttribute('treasure', false);
+    }
 
     // Update message with encouragement
     this.#updateGameMessage();
@@ -329,7 +333,7 @@ class Game {
  * Handle the play again button click
  */
 function updateBoardProgress() {
-  const treasureCount = Array.from(buttons).filter(btn => btn.hasAttribute("treasure")).length;
+  const treasureCount = Array.from(buttons).filter(btn => btn.getAttribute("treasure")=='true' || btn.getAttribute("treasure")==true).length;
   const progressFill = document.getElementById('progress-fill');
   const progressText = document.getElementById('progress-text');
   
@@ -388,6 +392,7 @@ function startNewGame() {
     }
   });
 }
+window.startNewGame = startNewGame;
 
 function showBoardCompletionCelebration() {
   message.textContent = "🎊 LEGENDARY! ALL TREASURES FOUND! 🎊";
