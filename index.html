@@ -90,8 +90,16 @@
 
       <p id="message">🏴‍☠️ Welcome, treasure hunter! Ready to find the gold? 🏴‍☠️</p>
 
+      <div id="board-progress" class="board-progress">
+        <div class="progress-label">Board Progress</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0/9 Treasures</div>
+      </div>
+
       <div class="controls">
-        <button class="control-btn" onclick="startNewGame()" start>⚓ Start New Adventure</button>
+        <button class="control-btn" onclick="window.startNewGame()" start>⚓ Start New Adventure</button>
         <button class="control-btn instructions-btn" popovertarget="instructions">📜 Instructions</button>
         <button class="control-btn dashboard-btn" popovertarget="dashboard">📊 Dashboard</button>
         <button class="control-btn chart-btn" popovertarget="score-chart">📈 Score chart</button>
@@ -103,6 +111,8 @@
           <p>🏴‍☠️ Click on the circles to search for the hidden treasure!</p>
           <p>💰 Find the treasure in the fewest attempts to get a higher score!</p>
           <p>⭐ Score = 10 - (number of attempts)</p>
+          <p><strong>🎯 NEW FEATURE:</strong> Treasures persist across games! Fill all 9 spots on the board to earn the legendary <strong>Board Master</strong> achievement and unlock massive rewards!</p>
+          <p>🏆 The more treasures on the board, the higher your bonus points!</p>
           <button popovertarget="instructions" popovertargetaction="hide">Got it!</button>
         </div>
 
@@ -222,6 +232,42 @@
               <div popover="auto" id="persistent-hint">
                 <div class="panel">
                   Awarded for never giving up: play 10 or more games, regardless of your score!
+                </div>
+              </div>
+              <div class="achievement-badge" id="board-master-badge">
+                <span class="badge-icon">🎯</span>
+                <span class="badge-name">Board Master</span>
+                <span class="badge-count" id="board-master-count">0</span>
+                <button class="badge-info-btn" popovertarget="board-master-hint" aria-label="Board Master Info"
+                  style="background:none;border:none;box-shadow:none;padding:0;color:white;font-weight:100;">🛈</button>
+              </div>
+              <div popover="auto" id="board-master-hint">
+                <div class="panel">
+                  LEGENDARY! Fill the entire 9-cell board with treasures!
+                </div>
+              </div>
+              <div class="achievement-badge" id="treasure-hoarder-badge">
+                <span class="badge-icon">💰</span>
+                <span class="badge-name">Treasure Hoarder</span>
+                <span class="badge-count" id="treasure-hoarder-count">0</span>
+                <button class="badge-info-btn" popovertarget="treasure-hoarder-hint" aria-label="Treasure Hoarder Info"
+                  style="background:none;border:none;box-shadow:none;padding:0;color:white;font-weight:100;">🛈</button>
+              </div>
+              <div popover="auto" id="treasure-hoarder-hint">
+                <div class="panel">
+                  Collect treasures across multiple games! Awarded for every 5 treasures collected.
+                </div>
+              </div>
+              <div class="achievement-badge" id="clean-slate-badge">
+                <span class="badge-icon">🧹</span>
+                <span class="badge-name">Clean Slate</span>
+                <span class="badge-count" id="clean-slate-count">0</span>
+                <button class="badge-info-btn" popovertarget="clean-slate-hint" aria-label="Clean Slate Info"
+                  style="background:none;border:none;box-shadow:none;padding:0;color:white;font-weight:100;">🛈</button>
+              </div>
+              <div popover="auto" id="clean-slate-hint">
+                <div class="panel">
+                  Complete the full board and choose to reset! Letting go brings new opportunities.
                 </div>
               </div>
             </div>
