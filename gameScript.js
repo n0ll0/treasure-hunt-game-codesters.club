@@ -358,13 +358,16 @@ function loadBoardState() {
       const boardState = JSON.parse(savedState);
       if (boardState.length === buttons.length) {
         boardState.forEach((state, index) => {
+          // Clear any existing treasure state first, then set if needed
           if (state.treasure === 'true') {
             buttons[index].setAttribute('treasure', 'true');
+          } else {
+            buttons[index].removeAttribute('treasure');
           }
         });
       }
     } catch (e) {
-      console.error('Failed to load board state:', e);
+      console.error('Failed to load board state from localStorage:', e.message);
     }
   }
 }
