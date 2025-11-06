@@ -330,10 +330,53 @@ class Game {
 }
 
 /**
+ * Get count of buttons that currently have valid treasures (treasure="true")
+ * This is the JS state that should be used consistently across the app
+ * @returns {number} Count of treasures on the board
+ */
+function getTreasureCount() {
+  return Array.from(buttons).filter(btn => btn.getAttribute("treasure") === 'true').length;
+}
+
+/**
+ * Save current board state to localStorage so progress persists across sessions
+ */
+function saveBoardState() {
+  const boardState = Array.from(buttons).map(btn => ({
+    treasure: btn.getAttribute("treasure")
+  }));
+  localStorage.setItem('boardState', JSON.stringify(boardState));
+}
+
+/**
+ * Load board state from localStorage to restore previous progress
+ */
+function loadBoardState() {
+  const savedState = localStorage.getItem('boardState');
+  if (savedState) {
+    try {
+      const boardState = JSON.parse(savedState);
+      if (boardState.length === buttons.length) {
+        boardState.forEach((state, index) => {
+          // Clear any existing treasure state first, then set if needed
+          if (state.treasure === 'true') {
+            buttons[index].setAttribute('treasure', 'true');
+          } else {
+            buttons[index].removeAttribute('treasure');
+          }
+        });
+      }
+    } catch (e) {
+      console.error('Failed to load board state from localStorage:', e.message);
+    }
+  }
+}
+
+/**
  * Handle the play again button click
  */
 function updateBoardProgress() {
-  const treasureCount = Array.from(buttons).filter(btn => btn.getAttribute("treasure")=='true' || btn.getAttribute("treasure")==true).length;
+  const treasureCount = getTreasureCount();
   const progressFill = document.getElementById('progress-fill');
   const progressText = document.getElementById('progress-text');
   
@@ -347,11 +390,14 @@ function updateBoardProgress() {
       progressFill.style.animation = 'pulse 1s infinite';
     }
   }
+  
+  // Save state whenever progress is updated
+  saveBoardState();
 }
 
 function startNewGame() {
-  // Check if board is completely filled
-  const treasureCount = Array.from(buttons).filter(btn => btn.hasAttribute("treasure")).length;
+  // Check if board is completely filled using correct JS state
+  const treasureCount = getTreasureCount();
   
   if (treasureCount === 9) {
     // Board is full! Show special celebration
@@ -385,9 +431,9 @@ function startNewGame() {
 
   document.querySelector('[start]').style.display = "none";
   
-  // Add starting animation to buttons without treasure
+  // Add starting animation to buttons without treasure (checking for treasure="true")
   buttons.forEach((btn, index) => {
-    if (!btn.hasAttribute("treasure")) {
+    if (btn.getAttribute("treasure") !== 'true') {
       btn.style.animation = `buttonAppear 0.5s ease-out ${index * 0.1}s both`;
     }
   });
@@ -491,8 +537,8 @@ function calcAndStoreScores(attempts) {
   let score = Math.max(1, 10 - attempts);
   let bonusMessage = "";
   
-  // Count total treasures found
-  const treasureCount = Array.from(buttons).filter(btn => btn.hasAttribute("treasure")).length;
+  // Count total treasures found using correct JS state
+  const treasureCount = getTreasureCount();
   
   // Bonus for perfect games (finding in 1 try)
   if (attempts === 1) {
@@ -543,4 +589,6 @@ function calcAndStoreScores(attempts) {
   refreshScoreboard(score);
 }
 
+// Load saved board state on page load before starting the game
+loadBoardState();
 startNewGame();
