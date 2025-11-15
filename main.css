@@ -33,6 +33,9 @@ html {
   display: table-cell;
   font-size: 1.5rem;
   vertical-align: middle;
+  /* Scale down for larger grids */
+  min-width: 2.5rem;
+  min-height: 2.5rem;
 }
 
 /* Desktop adjustments */
@@ -71,6 +74,9 @@ table.game {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   border: 3px solid #654321;
   border-spacing: 0.5rem;
+  /* Support dynamic grid sizes */
+  width: auto;
+  max-width: 90vw;
 }
 
 table.game td.button:active {
@@ -858,7 +864,8 @@ button[start]:active {
 .board-progress {
   margin: 1rem 0;
   text-align: center;
-  max-width: 300px;
+  max-width: min(400px, 90vw);
+  width: 100%;
 }
 
 .progress-label {
