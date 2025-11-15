@@ -1,8 +1,11 @@
 "use strict";
-const buttons = document.querySelectorAll("table.game .button");
+let buttons = document.querySelectorAll("table.game .button");
 const message = document.getElementById("message");
 
 var gameNumber = 0;
+
+// Track current board size (starts at 3x3)
+let currentBoardSize = parseInt(localStorage.getItem('boardSize')) || 3;
 
 const layout = {
   yaxis: { range: [1, 9], title: "score" },
@@ -335,17 +338,125 @@ class Game {
  * @returns {number} Count of treasures on the board
  */
 function getTreasureCount() {
-  return Array.from(buttons).filter(btn => btn.getAttribute("treasure") === 'true').length;
+  const currentButtons = document.querySelectorAll("table.game .button");
+  return Array.from(currentButtons).filter(btn => btn.getAttribute("treasure") === 'true').length;
+}
+
+/**
+ * Get total number of cells on the current board
+ * @returns {number} Total cells (boardSize * boardSize)
+ */
+function getTotalCells() {
+  return currentBoardSize * currentBoardSize;
+}
+
+/**
+ * Rebuild the game board with a new size
+ * @param {number} newSize - The new board size (e.g., 3, 4, 5, etc.)
+ */
+function rebuildBoard(newSize) {
+  currentBoardSize = newSize;
+  localStorage.setItem('boardSize', currentBoardSize.toString());
+  
+  // Get the table tbody
+  const tbody = document.querySelector('table.game tbody');
+  if (!tbody) return;
+  
+  // Clear existing board
+  tbody.innerHTML = '';
+  
+  // Create new rows and cells
+  for (let row = 0; row < newSize; row++) {
+    const tr = document.createElement('tr');
+    for (let col = 0; col < newSize; col++) {
+      const td = document.createElement('td');
+      const button = document.createElement('button');
+      button.className = 'button';
+      button.setAttribute('data-row', row.toString());
+      button.setAttribute('data-col', col.toString());
+      button.setAttribute('role', 'radio');
+      button.setAttribute('aria-checked', 'false');
+      button.tabIndex = (row === 0 && col === 0) ? 0 : -1;
+      
+      // Add event listeners
+      button.addEventListener('click', () => handleCellClick(button));
+      button.addEventListener('keydown', (e) => handleCellKeydown(e, button));
+      
+      td.appendChild(button);
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  
+  // Update the global buttons reference
+  buttons = document.querySelectorAll("table.game .button");
+  
+  // Load any saved board state
+  loadBoardState();
+  
+  // Update progress display
+  updateBoardProgress();
+}
+
+// Helper functions for keyboard navigation (need to be global)
+function handleCellClick(btn) {
+  const allButtons = document.querySelectorAll('.game button');
+  allButtons.forEach(b => {
+    b.setAttribute('aria-checked', 'false');
+    b.tabIndex = -1;
+  });
+  btn.setAttribute('aria-checked', 'true');
+  btn.tabIndex = 0;
+  btn.focus();
+}
+
+function handleCellKeydown(e, btn) {
+  const row = +btn.dataset.row, col = +btn.dataset.col;
+  let nextRow = row, nextCol = col;
+  switch (e.key) {
+    case 'ArrowUp':
+      nextRow = (row + currentBoardSize - 1) % currentBoardSize;
+      break;
+    case 'ArrowDown':
+      nextRow = (row + 1) % currentBoardSize;
+      break;
+    case 'ArrowLeft':
+      nextCol = (col + currentBoardSize - 1) % currentBoardSize;
+      break;
+    case 'ArrowRight':
+      nextCol = (col + 1) % currentBoardSize;
+      break;
+    case ' ':
+    case 'Enter':
+      btn.click();
+      return;
+    default:
+      return;
+  }
+  e.preventDefault();
+  const nextBtn = getCell(nextRow, nextCol);
+  if (nextBtn) handleCellClick(nextBtn);
+}
+
+function getCell(row, col) {
+  return document.querySelector(
+    `.game button[data-row="${row}"][data-col="${col}"]`
+  );
 }
 
 /**
  * Save current board state to localStorage so progress persists across sessions
  */
 function saveBoardState() {
-  const boardState = Array.from(buttons).map(btn => ({
+  const currentButtons = document.querySelectorAll("table.game .button");
+  const boardState = Array.from(currentButtons).map(btn => ({
     treasure: btn.getAttribute("treasure")
   }));
-  localStorage.setItem('boardState', JSON.stringify(boardState));
+  const state = {
+    boardSize: currentBoardSize,
+    cells: boardState
+  };
+  localStorage.setItem('boardState', JSON.stringify(state));
 }
 
 /**
@@ -355,14 +466,22 @@ function loadBoardState() {
   const savedState = localStorage.getItem('boardState');
   if (savedState) {
     try {
-      const boardState = JSON.parse(savedState);
-      if (boardState.length === buttons.length) {
-        boardState.forEach((state, index) => {
+      const state = JSON.parse(savedState);
+      const currentButtons = document.querySelectorAll("table.game .button");
+      
+      // If board size changed, rebuild the board
+      if (state.boardSize && state.boardSize !== currentBoardSize) {
+        rebuildBoard(state.boardSize);
+        return; // rebuildBoard will call loadBoardState again
+      }
+      
+      if (state.cells && state.cells.length === currentButtons.length) {
+        state.cells.forEach((cellState, index) => {
           // Clear any existing treasure state first, then set if needed
-          if (state.treasure === 'true') {
-            buttons[index].setAttribute('treasure', 'true');
+          if (cellState.treasure === 'true') {
+            currentButtons[index].setAttribute('treasure', 'true');
           } else {
-            buttons[index].removeAttribute('treasure');
+            currentButtons[index].removeAttribute('treasure');
           }
         });
       }
@@ -377,16 +496,17 @@ function loadBoardState() {
  */
 function updateBoardProgress() {
   const treasureCount = getTreasureCount();
+  const totalCells = getTotalCells();
   const progressFill = document.getElementById('progress-fill');
   const progressText = document.getElementById('progress-text');
   
   if (progressFill && progressText) {
-    const percentage = (treasureCount / 9) * 100;
+    const percentage = (treasureCount / totalCells) * 100;
     progressFill.style.width = `${percentage}%`;
-    progressText.textContent = `${treasureCount}/9 Treasures`;
+    progressText.textContent = `${treasureCount}/${totalCells} Treasures (${currentBoardSize}x${currentBoardSize})`;
     
     // Add pulse animation when close to completion
-    if (treasureCount >= 7) {
+    if (treasureCount >= totalCells - 2) {
       progressFill.style.animation = 'pulse 1s infinite';
     }
   }
@@ -396,10 +516,14 @@ function updateBoardProgress() {
 }
 
 function startNewGame() {
+  // Update buttons reference
+  buttons = document.querySelectorAll("table.game .button");
+  
   // Check if board is completely filled using correct JS state
   const treasureCount = getTreasureCount();
+  const totalCells = getTotalCells();
   
-  if (treasureCount === 9) {
+  if (treasureCount === totalCells) {
     // Board is full! Show special celebration
     showBoardCompletionCelebration();
     return;
@@ -413,13 +537,13 @@ function startNewGame() {
   game.state = new Game(buttons);
   
   // Check if no treasure could be placed (board full)
-  if (!game.state || (game.state.ended && treasureCount === 9)) {
+  if (!game.state || (game.state.ended && treasureCount === totalCells)) {
     showBoardCompletionCelebration();
     return;
   }
 
   // Clear message and add starting message
-  const remainingSpots = 9 - treasureCount;
+  const remainingSpots = totalCells - treasureCount;
   if (treasureCount > 0) {
     message.textContent = `🏴‍☠️ ${treasureCount} treasure${treasureCount > 1 ? 's' : ''} found! ${remainingSpots} spot${remainingSpots > 1 ? 's' : ''} left! 🏴‍☠️`;
   } else {
@@ -456,21 +580,51 @@ function showBoardCompletionCelebration() {
   
   // Show special completion message with options
   setTimeout(() => {
+    const nextSize = currentBoardSize + 1;
     const continueMsg = confirm(
       "🏆 BOARD MASTER ACHIEVEMENT! 🏆\n\n" +
-      "You've filled the entire board with treasures!\n" +
+      `You've filled the entire ${currentBoardSize}x${currentBoardSize} board with treasures!\n` +
       `Board Master Count: ${achievements.boardMaster}\n\n` +
-      "Click OK to reset the board and start fresh,\n" +
-      "or Cancel to admire your treasure collection!"
+      `Click OK to scale up to a ${nextSize}x${nextSize} board for infinite gameplay,\n` +
+      "or Cancel to reset the current board and start fresh!"
     );
     
     if (continueMsg) {
-      clearBoardTreasures();
-      startNewGame();
+      // Scale up the board!
+      scaleUpBoard();
+    } else {
+      // Ask if they want to reset
+      const resetConfirm = confirm(
+        "Do you want to reset the board and keep the same size?\n\n" +
+        "Click OK to reset, or Cancel to admire your collection."
+      );
+      if (resetConfirm) {
+        clearBoardTreasures();
+        startNewGame();
+      }
     }
   }, 2000);
   
   refreshScoreboard();
+}
+
+/**
+ * Scale up the board size by 1 and reset treasures
+ */
+function scaleUpBoard() {
+  const newSize = currentBoardSize + 1;
+  
+  // Clear all treasures
+  clearBoardTreasures();
+  
+  // Rebuild the board with new size
+  rebuildBoard(newSize);
+  
+  // Show celebration message
+  message.textContent = `🎉 Board scaled up to ${newSize}x${newSize}! Keep hunting! 🎉`;
+  
+  // Start a new game
+  startNewGame();
 }
 
 function createBoardCompletionParticle() {
@@ -501,7 +655,8 @@ function clearBoardTreasures() {
   achievements.cleanSlate = (achievements.cleanSlate || 0) + 1;
   localStorage.setItem('achievements', JSON.stringify(achievements));
   
-  buttons.forEach(btn => {
+  const currentButtons = document.querySelectorAll("table.game .button");
+  currentButtons.forEach(btn => {
     btn.removeAttribute("treasure");
     btn.removeAttribute("clicked");
   });
@@ -589,6 +744,12 @@ function calcAndStoreScores(attempts) {
   refreshScoreboard(score);
 }
 
-// Load saved board state on page load before starting the game
-loadBoardState();
+// Initialize the board on page load
+// If board size is different from default 3x3, rebuild it
+if (currentBoardSize !== 3) {
+  rebuildBoard(currentBoardSize);
+} else {
+  // Load saved board state on page load before starting the game
+  loadBoardState();
+}
 startNewGame();
