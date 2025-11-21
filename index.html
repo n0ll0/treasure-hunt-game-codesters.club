@@ -14,79 +14,26 @@
 
     <main>
       <!-- Improved: Keyboard-accessible 3x3 grid using ARIA roles and tabindex -->
-      <table class="game" aria-label="Treasure Hunt Grid">
+      <table class="game" aria-label="Treasure Hunt Grid" role="grid">
         <tbody>
           <tr>
-            <td><button class="button"></button></td>
-            <td><button class="button"></button></td>
-            <td><button class="button"></button></td>
+            <td><button class="button" data-row="0" data-col="0" role="radio" aria-checked="false" tabindex="0" ></button></td>
+            <td><button class="button" data-row="0" data-col="1" role="radio" aria-checked="false" tabindex="-1"></button></td>
+            <td><button class="button" data-row="0" data-col="2" role="radio" aria-checked="false" tabindex="-1"></button></td>
           </tr>
           <tr>
-            <td><button class="button"></button></td>
-            <td><button class="button"></button></td>
-            <td><button class="button"></button></td>
+            <td><button class="button" data-row="1" data-col="0" role="radio" aria-checked="false" tabindex="-1"></button></td>
+            <td><button class="button" data-row="1" data-col="1" role="radio" aria-checked="false" tabindex="-1"></button></td>
+            <td><button class="button" data-row="1" data-col="2" role="radio" aria-checked="false" tabindex="-1"></button></td>
           </tr>
           <tr>
-            <td><button class="button"></button></td>
-            <td><button class="button"></button></td>
-            <td><button class="button"></button></td>
+            <td><button class="button" data-row="2" data-col="0" role="radio" aria-checked="false" tabindex="-1"></button></td>
+            <td><button class="button" data-row="2" data-col="1" role="radio" aria-checked="false" tabindex="-1"></button></td>
+            <td><button class="button" data-row="2" data-col="2" role="radio" aria-checked="false" tabindex="-1"></button></td>
           </tr>
         </tbody>
       </table>
-      <script>
-        // Keyboard navigation and radio group logic for the grid
-        const gridSize = 3;
-        function getCell(row, col) {
-          return document.querySelector(
-            `.game button[data-row="${row}"][data-col="${col}"]`
-          );
-        }
-        function handleCellClick(btn) {
-          // Set aria-checked and tabindex for all buttons
-          document.querySelectorAll('.game button').forEach(b => {
-            b.setAttribute('aria-checked', 'false');
-            b.tabIndex = -1;
-          });
-          btn.setAttribute('aria-checked', 'true');
-          btn.tabIndex = 0;
-          btn.focus();
-          // Call your game logic here if needed
-          if (typeof cellSelected === 'function') cellSelected(btn);
-        }
-        function handleCellKeydown(e, btn) {
-          const row = +btn.dataset.row, col = +btn.dataset.col;
-          let nextRow = row, nextCol = col;
-          switch (e.key) {
-            case 'ArrowUp':
-              nextRow = (row + gridSize - 1) % gridSize;
-              break;
-            case 'ArrowDown':
-              nextRow = (row + 1) % gridSize;
-              break;
-            case 'ArrowLeft':
-              nextCol = (col + gridSize - 1) % gridSize;
-              break;
-            case 'ArrowRight':
-              nextCol = (col + 1) % gridSize;
-              break;
-            case ' ':
-            case 'Enter':
-              btn.click();
-              return;
-            default:
-              return;
-          }
-          e.prevenbuttonefault();
-          const nextBtn = getCell(nextRow, nextCol);
-          if (nextBtn) handleCellClick(nextBtn);
-        }
-        // Ensure only one button is tabbable at start
-        window.addEventListener('DOMContentLoaded', () => {
-          const first = getCell(0, 0);
-          if (first) first.tabIndex = 0;
-        });
-      </script>
-      </div>
+
 
       <p id="message">🏴‍☠️ Welcome, treasure hunter! Ready to find the gold? 🏴‍☠️</p>
 
@@ -145,6 +92,20 @@
 
       <div id="dashboard" popover="manual">
         <div class="dashboard-panel">
+          <div class="board-size-control">
+            <button class="action-btn" popovertarget="dashboard" popovertargetaction="hide">Close Dashboard</button>
+
+              <label for="board-size-select">
+                <span>Board Size:</span>
+                <select id="board-size-select" class="styled-select">
+                  <option value="2">2 x 2</option>
+                  <option value="3">3 x 3</option>
+                  <option value="4">4 x 4</option>
+                  <option value="5">5 x 5</option>
+                </select>
+
+              </label>
+          </div>
           <h3>📊 Treasure Hunter Dashboard</h3>
 
           <!-- Main Stats Cards -->
@@ -280,8 +241,6 @@
               <div class="no-games">🗺️ No expeditions yet, matey!</div>
             </div>
           </div>
-
-          <button class="action-btn" popovertarget="dashboard" popovertargetaction="hide">Close Dashboard</button>
 
           <button class="action-btn reset-stats-btn" id="resetStatsBtn" popovertarget="reset-confirmation">
             🔄 Reset All Stats

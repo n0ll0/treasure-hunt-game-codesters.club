@@ -1,11 +1,23 @@
 "use strict";
 let buttons = document.querySelectorAll("table.game .button");
 const message = document.getElementById("message");
+const startButton = document.querySelector('[start]');
+const boardSizeSelect = document.getElementById('board-size-select');
+
+var currentBoardSize = parseInt(localStorage.getItem('boardSize')) || 3;
+
+boardSizeSelect.value = currentBoardSize.toString();
+
+boardSizeSelect.addEventListener('change', (e) => {
+  currentBoardSize = parseInt(e.target.value);
+  localStorage.setItem('boardSize', currentBoardSize);
+  // Clear saved board state to prevent loadBoardState from reverting the size
+  localStorage.removeItem('boardState');
+  rebuildBoard(currentBoardSize);
+  startNewGame();
+});
 
 var gameNumber = 0;
-
-// Track current board size (starts at 3x3)
-let currentBoardSize = parseInt(localStorage.getItem('boardSize')) || 3;
 
 const layout = {
   yaxis: { range: [1, 9], title: "score" },
@@ -191,24 +203,21 @@ function createFallbackChart(scores) {
   statsDiv.innerHTML = chartHTML;
 }
 
-function calcAndStoreScores(attempts) {
-  const score = 10 - attempts;
-
-  Scores.add(score);
-
-  refreshScoreboard(score)
-}
-
 class Game {
   #treasure;
   #buttons;
+  #clickHandler;
   ended;
-  constructor (btns) {
+  constructor (btns, gameSize) {
     this.attempts = 0;
     this.ended = false;
     this.#buttons = btns;
+    this.gameSize = gameSize;
+    this.#clickHandler = this.#clickButton.bind(this);
     this.#randomizeTreasure();
-    this.#buttons.forEach(btn => { btn.onclick = this.#clickButton.bind(this); });
+    this.#buttons.forEach(btn => {
+      btn.addEventListener('click', this.#clickHandler);
+    });
   }
 
   #randomizeTreasure() {
@@ -222,10 +231,15 @@ class Game {
     // }
     
     this.#treasure = this.#buttons[Math.floor(Math.random() * this.#buttons.length)];
+    window.treasure = this.#treasure;
+
   }
 
   #clickButton(event) {
-    const button = event.target;
+    const button = /** @type {HTMLButtonElement} */ (event.currentTarget || event.target);
+    if (!button) return;
+
+    handleCellClick(button, { skipCellSelectedHook: true });
 
     if (button.getAttribute("clicked")) return;
 
@@ -281,14 +295,25 @@ class Game {
     // Add celebration effect
     this.#createCelebrationEffect();
     
-    document.querySelector('[start]').style.display = "inline-block";
+    if (startButton) {
+      startButton.style.display = "inline-block";
+    }
     this.#treasure.setAttribute("treasure", true);
     this.#buttons.forEach(btn => {
-      btn.onclick = null;
+      btn.removeEventListener('click', this.#clickHandler);
     });
     
     updateBoardProgress();
     calcAndStoreScores(this.attempts);
+    // Check if board is completely filled using correct JS state
+    const treasureCountBefore = getTreasureCount();
+    const totalCellsBefore = getTotalCells();
+
+    if (treasureCountBefore === totalCellsBefore) {
+      // Board is full! Show special celebration
+      showBoardCompletionCelebration();
+      return;
+    }
   }
 
   #createCelebrationEffect() {
@@ -325,6 +350,7 @@ class Game {
 
   killGame() {
     this.#buttons.forEach(btn => {
+      btn.removeEventListener('click', this.#clickHandler);
       // Keep treasures persistent, only remove clicked state
       btn.removeAttribute("clicked");
     });
@@ -358,6 +384,10 @@ function rebuildBoard(newSize) {
   currentBoardSize = newSize;
   localStorage.setItem('boardSize', currentBoardSize.toString());
   
+  if (boardSizeSelect) {
+    boardSizeSelect.value = currentBoardSize.toString();
+  }
+  
   // Get the table tbody
   const tbody = document.querySelector('table.game tbody');
   if (!tbody) return;
@@ -378,8 +408,7 @@ function rebuildBoard(newSize) {
       button.setAttribute('aria-checked', 'false');
       button.tabIndex = (row === 0 && col === 0) ? 0 : -1;
       
-      // Add event listeners
-      button.addEventListener('click', () => handleCellClick(button));
+      // Add keyboard navigation listener per cell
       button.addEventListener('keydown', (e) => handleCellKeydown(e, button));
       
       td.appendChild(button);
@@ -399,7 +428,7 @@ function rebuildBoard(newSize) {
 }
 
 // Helper functions for keyboard navigation (need to be global)
-function handleCellClick(btn) {
+function handleCellClick(btn, options = {}) {
   const allButtons = document.querySelectorAll('.game button');
   allButtons.forEach(b => {
     b.setAttribute('aria-checked', 'false');
@@ -407,7 +436,13 @@ function handleCellClick(btn) {
   });
   btn.setAttribute('aria-checked', 'true');
   btn.tabIndex = 0;
-  btn.focus();
+  if (options.focus !== false) {
+    btn.focus({ preventScroll: true });
+  }
+
+  if (!options.skipCellSelectedHook && typeof window.cellSelected === 'function') {
+    window.cellSelected(btn);
+  }
 }
 
 function handleCellKeydown(e, btn) {
@@ -442,6 +477,31 @@ function getCell(row, col) {
   return document.querySelector(
     `.game button[data-row="${row}"][data-col="${col}"]`
   );
+}
+
+function resetKeyboardSelection() {
+  const allButtons = document.querySelectorAll('.game button');
+  let focusableSet = false;
+  allButtons.forEach(btn => {
+    btn.setAttribute('aria-checked', 'false');
+    if (!focusableSet && btn.getAttribute('treasure') !== 'true') {
+      btn.tabIndex = 0;
+      focusableSet = true;
+    } else {
+      btn.tabIndex = -1;
+    }
+  });
+
+  if (!focusableSet && allButtons.length) {
+    allButtons[0].tabIndex = 0;
+  }
+}
+
+function focusFirstPlayableCell() {
+  const target = document.querySelector('.game button:not([treasure="true"])') || document.querySelector('.game button');
+  if (target) {
+    target.focus({ preventScroll: true });
+  }
 }
 
 /**
@@ -519,22 +579,18 @@ function startNewGame() {
   // Update buttons reference
   buttons = document.querySelectorAll("table.game .button");
   
-  // Check if board is completely filled using correct JS state
-  const treasureCount = getTreasureCount();
-  const totalCells = getTotalCells();
-  
-  if (treasureCount === totalCells) {
-    // Board is full! Show special celebration
-    showBoardCompletionCelebration();
-    return;
-  }
-  
   if (game.state) {
     game.state.killGame()
     delete game.state;
   };
 
-  game.state = new Game(buttons);
+  game.state = new Game(buttons, currentBoardSize);
+
+  const treasureCount = getTreasureCount();
+  const totalCells = getTotalCells();
+
+  resetKeyboardSelection();
+  focusFirstPlayableCell();
   
   // Check if no treasure could be placed (board full)
   if (!game.state || (game.state.ended && treasureCount === totalCells)) {
@@ -553,7 +609,9 @@ function startNewGame() {
   updateBoardProgress();
   refreshScoreboard();
 
-  document.querySelector('[start]').style.display = "none";
+  if (startButton) {
+    startButton.style.display = "none";
+  }
   
   // Add starting animation to buttons without treasure (checking for treasure="true")
   buttons.forEach((btn, index) => {
@@ -600,10 +658,12 @@ function showBoardCompletionCelebration() {
       );
       if (resetConfirm) {
         clearBoardTreasures();
+        currentBoardSize++;
+        boardSizeSelect.value = currentBoardSize;
         startNewGame();
       }
     }
-  }, 2000);
+  }, 400);
   
   refreshScoreboard();
 }
@@ -660,6 +720,7 @@ function clearBoardTreasures() {
     btn.removeAttribute("treasure");
     btn.removeAttribute("clicked");
   });
+  resetKeyboardSelection();
   
   updateBoardProgress();
 }
@@ -744,12 +805,55 @@ function calcAndStoreScores(attempts) {
   refreshScoreboard(score);
 }
 
-// Initialize the board on page load
-// If board size is different from default 3x3, rebuild it
-if (currentBoardSize !== 3) {
-  rebuildBoard(currentBoardSize);
-} else {
-  // Load saved board state on page load before starting the game
-  loadBoardState();
+function attachGlobalShortcuts() {
+  document.addEventListener('keydown', handleGlobalKeydown);
 }
+
+function handleGlobalKeydown(event) {
+  // Allow Ctrl+Space to force restart even inside the grid
+  const isGlobalRestart = (event.code === 'Space' && event.ctrlKey);
+  const isStandardRestart = isSpaceKey(event) && !event.ctrlKey;
+
+  if (!isGlobalRestart && !isStandardRestart) return;
+  if (!startButton) return;
+
+  // For plain Space, respect focus safety checks
+  if (isStandardRestart && !canTriggerStartShortcut(event)) return;
+
+  event.preventDefault();
+  startNewGame();
+}
+
+function isSpaceKey(event) {
+  return event.code === 'Space' || event.key === ' ';
+}
+
+function canTriggerStartShortcut(event) {
+  if (!startButton || startButton.disabled) return false;
+  if (!isElementVisible(startButton)) return false;
+
+  const target = /** @type {HTMLElement | null} */ (event.target instanceof HTMLElement ? event.target : null);
+  if (!target) return true;
+
+  if (target === startButton) return false; // native space activation already works
+  if (isTypingSurface(target)) return false;
+  if (target.closest('.game')) return false;
+
+  return true;
+}
+
+function isTypingSurface(element) {
+  const tagName = element.tagName;
+  const formControlTags = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION'];
+  if (formControlTags.includes(tagName)) return true;
+  if (element.isContentEditable) return true;
+  return false;
+}
+
+function isElementVisible(element) {
+  return !!(element.offsetParent || element.getClientRects().length);
+}
+
+rebuildBoard(currentBoardSize);
+attachGlobalShortcuts();
 startNewGame();
